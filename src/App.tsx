@@ -1,26 +1,57 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import styled from 'styled-components';
 
-function App() {
+import { ColumnsType } from 'types/columns';
+import { Columns, Header } from 'components';
+
+const App = () => {
+  const [columnsInfo, setColumnsInfo] = useState<ColumnsType>([
+    {
+      id: 0,
+      title: 'TODO',
+      cards: [
+        { title: 'Some title', id: 0 },
+        { title: 'Another one title', id: 1 },
+      ],
+    },
+    {
+      id: 1,
+      title: 'In Progress',
+      cards: [
+        { title: 'Some second', id: 0 },
+        { title: 'Another one title', id: 1 },
+        { title: 'And another one', id: 2 },
+      ],
+    },
+    {
+      id: 2,
+      title: 'Testing',
+      cards: [
+        { title: 'Some third title', id: 0 },
+        { title: 'Another one title', id: 1 },
+      ],
+    },
+    {
+      id: 3,
+      title: 'Done',
+      cards: [
+        { title: 'Some fourth title', id: 0 },
+        { title: 'Another one title', id: 1 },
+      ],
+    },
+  ]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Root>
+      <Header username="username" />
+      <Columns columnsInfo={columnsInfo} />
+    </Root>
   );
-}
+};
 
 export default App;
+
+const Root = styled.div`
+  padding: 30px 60px;
+  height: 100vh;
+`;
