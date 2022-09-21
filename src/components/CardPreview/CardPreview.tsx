@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { EditSvg } from 'components/svg';
 import { SaveButton } from 'components';
 
-const CardPreview: FC<CardPreviewProps> = ({ title, id, editCard }) => {
+const CardPreview: FC<CardPreviewProps> = ({ title, columnId, cardId, editCard }) => {
   const [isEditable, setIsEditable] = useState<boolean>(false);
 
   const enableEdit = () => setIsEditable(true);
@@ -17,14 +17,14 @@ const CardPreview: FC<CardPreviewProps> = ({ title, id, editCard }) => {
   };
 
   const onClickSave = () => {
-    editCard(id, textareaVal);
+    editCard(columnId, cardId, textareaVal);
     disableEdit();
   };
   return (
     <>
       {isEditable ? (
         <EditInterface>
-          <EditArea onChange={handleChange} value={textareaVal} />
+          <EditArea onChange={handleChange} value={textareaVal} autoFocus />
           <SaveButton onClick={onClickSave}>Save</SaveButton>
         </EditInterface>
       ) : (
@@ -43,8 +43,9 @@ export default CardPreview;
 
 type CardPreviewProps = {
   title: string;
-  id: number;
-  editCard: (cardId: number, newTitle: string) => void;
+  columnId: number;
+  cardId: number;
+  editCard: (columnId: number, cardId: number, newTitle: string) => void;
 };
 
 const Title = styled.div`
@@ -58,6 +59,7 @@ const Title = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
   &:hover {
     background-color: #e2e2e2;
   }
@@ -70,6 +72,9 @@ const EditButton = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  position: absolute;
+  top: 3px;
+  right: 5px;
   &:hover {
     background-color: #c9c9c9;
   }
@@ -88,7 +93,6 @@ const EditArea = styled.textarea`
   border: 1px solid rgba(0, 0, 0, 0.3);
   padding: 7px 15px;
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 14px;
   &:focus {
     outline: 1px solid #000;
   }

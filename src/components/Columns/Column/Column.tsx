@@ -4,7 +4,9 @@ import styled from 'styled-components';
 import { CardsType } from 'types/columns';
 import { CardPreview, SaveButton } from 'components';
 
-const Column: FC<ColumnProps> = ({ id, title, cards, addCard, editCard }) => {
+const Column: FC<ColumnProps> = ({ id, title, cards, cardsActions }) => {
+  const { addCard, deleteCard, editCard } = cardsActions;
+
   const [isEditable, setIsEditable] = useState<boolean>(false);
 
   const enableEdit = () => setIsEditable(true);
@@ -16,7 +18,7 @@ const Column: FC<ColumnProps> = ({ id, title, cards, addCard, editCard }) => {
     setInputVal(e.target.value);
   };
   const onCardCreate = () => {
-    addCard(inputVal);
+    addCard(id, inputVal);
     setInputVal('');
     setIsEditable(false);
   };
@@ -26,7 +28,13 @@ const Column: FC<ColumnProps> = ({ id, title, cards, addCard, editCard }) => {
       <Header>{title}</Header>
       <Content>
         {cards.map((item) => (
-          <CardPreview title={item.title} id={item.id} key={item.id} editCard={editCard} />
+          <CardPreview
+            title={item.title}
+            cardId={item.id}
+            columnId={id}
+            key={item.id}
+            editCard={editCard}
+          />
         ))}
         {isEditable ? (
           <AddingCardInterface>
@@ -60,8 +68,11 @@ type ColumnProps = {
   id: number;
   title: string;
   cards: CardsType;
-  addCard: (title: string) => void;
-  editCard: (cardId: number, newTitle: string) => void;
+  cardsActions: {
+    addCard: (columnId: number, title: string) => void;
+    deleteCard: (columnId: number, cardId: number) => void;
+    editCard: (columnId: number, cardId: number, newTitle: string) => void;
+  };
 };
 
 const Content = styled.div`

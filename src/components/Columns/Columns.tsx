@@ -5,20 +5,6 @@ import { ColumnsType } from 'types/columns';
 import Column from './Column/Column';
 
 const Columns: FC<ColumnsProps> = ({ columnsInfo, cardsActions }) => {
-  const { addCard, deleteCard, editCard } = cardsActions;
-
-  const addCardToColumn = (id: number) => {
-    return function (title: string) {
-      addCard(id, title);
-    };
-  };
-
-  const editCardInColumn = (id: number) => {
-    return function (cardId: number, newTitle: string) {
-      editCard(id, cardId, newTitle);
-    };
-  };
-
   return (
     <Root>
       {columnsInfo.map((item) => {
@@ -28,8 +14,7 @@ const Columns: FC<ColumnsProps> = ({ columnsInfo, cardsActions }) => {
             title={item.title}
             cards={item.cards}
             key={item.id}
-            addCard={addCardToColumn(item.id)}
-            editCard={editCardInColumn(item.id)}
+            cardsActions={cardsActions}
           />
         );
       })}
