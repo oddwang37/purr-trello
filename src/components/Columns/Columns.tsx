@@ -5,9 +5,17 @@ import { ColumnsType } from 'types/columns';
 import Column from './Column/Column';
 
 const Columns: FC<ColumnsProps> = ({ columnsInfo, cardsActions }) => {
+  const { addCard, deleteCard, editCard } = cardsActions;
+
   const addCardToColumn = (id: number) => {
     return function (title: string) {
-      cardsActions.addCard(id, title);
+      addCard(id, title);
+    };
+  };
+
+  const editCardInColumn = (id: number) => {
+    return function (cardId: number, newTitle: string) {
+      editCard(id, cardId, newTitle);
     };
   };
 
@@ -21,6 +29,7 @@ const Columns: FC<ColumnsProps> = ({ columnsInfo, cardsActions }) => {
             cards={item.cards}
             key={item.id}
             addCard={addCardToColumn(item.id)}
+            editCard={editCardInColumn(item.id)}
           />
         );
       })}
@@ -35,6 +44,7 @@ type ColumnsProps = {
   cardsActions: {
     addCard: (columnId: number, title: string) => void;
     deleteCard: (columnId: number, cardId: number) => void;
+    editCard: (columnId: number, cardId: number, newTitle: string) => void;
   };
 };
 

@@ -74,7 +74,16 @@ const App = () => {
     newColumns[columnId].cards = newCards;
     setColumnsInfo(newColumns);
   };
-
+  const editCard = (columnId: number, cardId: number, newTitle: string) => {
+    const newColumns = cloneColumns(columnsInfo);
+    const newCards = newColumns[columnId].cards.map((item) => {
+      if (item.id === cardId) {
+        return { ...item, title: newTitle };
+      } else return item;
+    });
+    newColumns[columnId].cards = newCards;
+    setColumnsInfo(newColumns);
+  };
   useEffect(() => {
     addCard(0, 'new card');
     deleteCard(1, 0);
@@ -83,6 +92,7 @@ const App = () => {
   const cardsActions = {
     addCard,
     deleteCard,
+    editCard,
   };
   return (
     <Root>

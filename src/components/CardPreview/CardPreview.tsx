@@ -4,24 +4,28 @@ import styled from 'styled-components';
 import { EditSvg } from 'components/svg';
 import { SaveButton } from 'components';
 
-const CardPreview: FC<CardPreviewProps> = ({ title }) => {
+const CardPreview: FC<CardPreviewProps> = ({ title, id, editCard }) => {
   const [isEditable, setIsEditable] = useState<boolean>(false);
 
   const enableEdit = () => setIsEditable(true);
   const disableEdit = () => setIsEditable(false);
 
-  const [textareaVal, setTextareaVal] = useState<string>('');
+  const [textareaVal, setTextareaVal] = useState<string>(title);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTextareaVal(e.target.value);
   };
 
+  const onClickSave = () => {
+    editCard(id, textareaVal);
+    disableEdit();
+  };
   return (
     <>
       {isEditable ? (
         <EditInterface>
           <EditArea onChange={handleChange} value={textareaVal} />
-          <SaveButton>Save</SaveButton>
+          <SaveButton onClick={onClickSave}>Save</SaveButton>
         </EditInterface>
       ) : (
         <Title>
@@ -39,6 +43,8 @@ export default CardPreview;
 
 type CardPreviewProps = {
   title: string;
+  id: number;
+  editCard: (cardId: number, newTitle: string) => void;
 };
 
 const Title = styled.div`
