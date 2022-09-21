@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 import { ColumnsType } from 'types/columns';
@@ -10,33 +10,33 @@ const App = () => {
       id: 0,
       title: 'TODO',
       cards: [
-        { title: 'Some title', id: 0 },
-        { title: 'Another one title', id: 1 },
+        { id: 0, title: 'First title', description: '', comments: [] },
+        { id: 1, title: 'Another one title', description: '', comments: [] },
       ],
     },
     {
       id: 1,
       title: 'In Progress',
       cards: [
-        { title: 'Some second', id: 0 },
-        { title: 'Another one title', id: 1 },
-        { title: 'And another one', id: 2 },
+        { id: 0, title: 'Some second', description: '', comments: [] },
+        { id: 1, title: 'Another one title', description: '', comments: [] },
+        { id: 2, title: 'And another one', description: '', comments: [] },
       ],
     },
     {
       id: 2,
       title: 'Testing',
       cards: [
-        { title: 'Some third title', id: 0 },
-        { title: 'Another one title', id: 1 },
+        { id: 0, title: 'Some third title', description: '', comments: [] },
+        { id: 1, title: 'Another one title', description: '', comments: [] },
       ],
     },
     {
       id: 3,
       title: 'Done',
       cards: [
-        { title: 'Some fourth title', id: 0 },
-        { title: 'Another one title', id: 1 },
+        { id: 0, title: 'Some fourth title', description: '', comments: [] },
+        { id: 1, title: 'Another one title', description: '', comments: [] },
       ],
     },
   ]);
@@ -52,11 +52,42 @@ const App = () => {
   const closeCard = () => {
     setCardOpened(false);
   };
+  //  --------------------- Actions with columns -----------------
 
+  const cloneColumns = (array: ColumnsType) => {
+    const clonedArray = [] as ColumnsType;
+    array.forEach((item) => clonedArray.push(Object.assign({}, item)));
+    return clonedArray;
+  };
+  const rand = () => {
+    const random = Math.random() * 1001;
+    return Math.floor(random);
+  };
+  const addCard = (columnId: number, title: string) => {
+    const newColumns = cloneColumns(columnsInfo);
+    newColumns[columnId].cards.push({ id: rand(), title, description: '', comments: [] });
+    setColumnsInfo(newColumns);
+  };
+  const deleteCard = (columnId: number, cardId: number) => {
+    const newColumns = cloneColumns(columnsInfo);
+    const newCards = newColumns[columnId].cards.filter((item) => item.id !== cardId);
+    newColumns[columnId].cards = newCards;
+    setColumnsInfo(newColumns);
+  };
+
+  useEffect(() => {
+    addCard(0, 'new card');
+    deleteCard(1, 0);
+  }, []);
+
+  const cardsActions = {
+    addCard,
+    deleteCard,
+  };
   return (
     <Root>
       <Header username="username" />
-      <Columns columnsInfo={columnsInfo} />
+      <Columns columnsInfo={columnsInfo} cardsActions={cardsActions} />
       <LoginModal closeModal={closeModal} isOpened={isModalOpened} />
       <Card closeCard={closeCard} isOpened={isCardOpened} />
     </Root>

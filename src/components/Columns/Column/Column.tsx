@@ -1,21 +1,54 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import styled from 'styled-components';
 
 import { CardsType } from 'types/columns';
-import { CardPreview } from 'components';
+import { CardPreview, SaveButton } from 'components';
 
-const Column: FC<ColumnProps> = ({ id, title, cards }) => {
+const Column: FC<ColumnProps> = ({ id, title, cards, addCard }) => {
+  const [isEditable, setIsEditable] = useState<boolean>(false);
+
+  const enableEdit = () => setIsEditable(true);
+  const disableEdit = () => setIsEditable(false);
+
+  const [inputVal, setInputVal] = useState<string>('');
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setInputVal(e.target.value);
+  };
+  const onCardCreate = () => {
+    addCard(inputVal);
+    setInputVal('');
+    setIsEditable(false);
+  };
+
   return (
     <Root>
       <Header>{title}</Header>
       <Content>
         {cards.map((item) => (
-          <CardPreview title={item.title} />
+          <CardPreview title={item.title} key={item.id} />
         ))}
-        <AddCard>
-          <Plus>+</Plus>
-          <div>Add card</div>
-        </AddCard>
+        {isEditable ? (
+          <AddingCardInterface>
+            <AddCardInput
+              placeholder="Enter a card name..."
+              autoFocus
+              onChange={handleChange}
+              value={inputVal}
+            />
+            <ButtonsWrapper>
+              <SaveButton onClick={onCardCreate}>Create</SaveButton>
+              <CancelAdding onClick={disableEdit}>
+                <div>&times;</div>
+              </CancelAdding>
+            </ButtonsWrapper>
+          </AddingCardInterface>
+        ) : (
+          <AddCard onClick={enableEdit}>
+            <Plus>+</Plus>
+            <div>Add card</div>
+          </AddCard>
+        )}
       </Content>
     </Root>
   );
@@ -27,6 +60,7 @@ type ColumnProps = {
   id: number;
   title: string;
   cards: CardsType;
+  addCard: (title: string) => void;
 };
 
 const Content = styled.div`
@@ -38,6 +72,7 @@ const Root = styled.div`
   background-color: #fff;
   border-radius: 6px;
   align-self: flex-start;
+  box-shadow: 5px 10px 10px rgba(0, 0, 0, 0.3);
 `;
 
 const Header = styled.div`
@@ -59,6 +94,41 @@ const AddCard = styled.div`
   cursor: pointer;
   &:hover {
     background-color: #e2e2e2;
+  }
+`;
+const AddingCardInterface = styled.div``;
+const AddCardInput = styled.textarea`
+  resize: none;
+  width: 100%;
+  height: 60px;
+  padding: 8px 12px;
+  border-radius: 5px;
+  font-family: Arial, Helvetica, sans-serif;
+  border: 1px solid #000;
+  font-size: 14px;
+  &:focus {
+    border: none;
+  }
+`;
+const ButtonsWrapper = styled.div`
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`;
+const CancelAdding = styled.div`
+  font-weight: 500;
+  font-size: 28px;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  border-radius: 100%;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.2);
   }
 `;
 const Plus = styled.div`

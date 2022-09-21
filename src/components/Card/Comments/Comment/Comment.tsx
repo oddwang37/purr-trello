@@ -40,6 +40,7 @@ const Date = styled.span`
 `;
 const Username = styled.div`
   font-weight: 700;
+  font-size: 14px;
 `;
 const Text = styled.div`
   width: 450px;
@@ -47,6 +48,7 @@ const Text = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 5px;
   margin: 5px 0;
+  font-size: 14px;
 `;
 const EditBtn = styled(Date)`
   cursor: pointer;
