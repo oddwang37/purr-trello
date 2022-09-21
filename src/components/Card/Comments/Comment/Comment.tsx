@@ -47,7 +47,7 @@ const Text = styled.div`
   padding: 5px 15px;
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 5px;
-  margin: 5px 0;
+  margin: 5px 0 12px 0;
   font-size: 14px;
 `;
 const EditBtn = styled(Date)`

@@ -44,7 +44,7 @@ const Comments: FC<CommentsProps> = ({ comments }) => {
       </InputWrapper>
       <CommentsSection>
         {comments.map((item) => (
-          <Comment text={item.text} date={item.date} />
+          <Comment text={item.text} date={item.date} key={item.id} />
         ))}
       </CommentsSection>
     </>

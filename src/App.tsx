@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
-import { ColumnsType } from 'types/columns';
+import { ColumnsType, CardType } from 'types/columns';
 import { Columns, Header, LoginModal, Card } from 'components';
 
 const App = () => {
@@ -41,6 +41,18 @@ const App = () => {
     },
   ]);
 
+  const [popupCardInfo, setPopupCardInfo] = useState<CardType>({
+    id: 0,
+    title: '',
+    description: '',
+    comments: [],
+  });
+
+  const changePopupCardInfo = (info: CardType) => {
+    setPopupCardInfo(info);
+    openCard();
+  };
+
   const [isModalOpened, setModalOpened] = useState<boolean>(false);
 
   const closeModal = () => {
@@ -49,9 +61,9 @@ const App = () => {
 
   const [isCardOpened, setCardOpened] = useState<boolean>(true);
 
-  const closeCard = () => {
-    setCardOpened(false);
-  };
+  const openCard = () => setCardOpened(true);
+  const closeCard = () => setCardOpened(false);
+
   //  --------------------- Actions with columns -----------------
 
   const cloneColumns = (array: ColumnsType) => {
@@ -84,22 +96,19 @@ const App = () => {
     newColumns[columnId].cards = newCards;
     setColumnsInfo(newColumns);
   };
-  useEffect(() => {
-    addCard(0, 'new card');
-    deleteCard(1, 0);
-  }, []);
 
   const cardsActions = {
     addCard,
     deleteCard,
     editCard,
+    changePopupCardInfo,
   };
   return (
     <Root>
       <Header username="username" />
       <Columns columnsInfo={columnsInfo} cardsActions={cardsActions} />
       <LoginModal closeModal={closeModal} isOpened={isModalOpened} />
-      <Card closeCard={closeCard} isOpened={isCardOpened} />
+      <Card cardInfo={popupCardInfo} closeCard={closeCard} isOpened={isCardOpened} />
     </Root>
   );
 };

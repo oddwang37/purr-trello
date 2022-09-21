@@ -4,7 +4,13 @@ import styled from 'styled-components';
 import { EditSvg } from 'components/svg';
 import { SaveButton } from 'components';
 
-const CardPreview: FC<CardPreviewProps> = ({ title, columnId, cardId, editCard }) => {
+const CardPreview: FC<CardPreviewProps> = ({
+  title,
+  columnId,
+  cardId,
+  editCard,
+  changePopupCardInfo,
+}) => {
   const [isEditable, setIsEditable] = useState<boolean>(false);
 
   const enableEdit = () => setIsEditable(true);
@@ -20,6 +26,7 @@ const CardPreview: FC<CardPreviewProps> = ({ title, columnId, cardId, editCard }
     editCard(columnId, cardId, textareaVal);
     disableEdit();
   };
+
   return (
     <>
       {isEditable ? (
@@ -28,7 +35,7 @@ const CardPreview: FC<CardPreviewProps> = ({ title, columnId, cardId, editCard }
           <SaveButton onClick={onClickSave}>Save</SaveButton>
         </EditInterface>
       ) : (
-        <Title>
+        <Title onClick={changePopupCardInfo}>
           <div>{title}</div>
           <EditButton onClick={enableEdit}>
             <EditSvg />
@@ -46,6 +53,7 @@ type CardPreviewProps = {
   columnId: number;
   cardId: number;
   editCard: (columnId: number, cardId: number, newTitle: string) => void;
+  changePopupCardInfo: () => void;
 };
 
 const Title = styled.div`

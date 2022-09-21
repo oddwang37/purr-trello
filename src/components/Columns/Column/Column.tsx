@@ -1,10 +1,10 @@
 import React, { FC, useState } from 'react';
 import styled from 'styled-components';
 
-import { CardsType } from 'types/columns';
+import { CardsType, CardType } from 'types/columns';
 import { CardPreview, SaveButton } from 'components';
 
-const Column: FC<ColumnProps> = ({ id, title, cards, cardsActions }) => {
+const Column: FC<ColumnProps> = ({ id, title, cards, cardsActions, changePopupCardInfo }) => {
   const { addCard, deleteCard, editCard } = cardsActions;
 
   const [isEditable, setIsEditable] = useState<boolean>(false);
@@ -34,6 +34,7 @@ const Column: FC<ColumnProps> = ({ id, title, cards, cardsActions }) => {
             columnId={id}
             key={item.id}
             editCard={editCard}
+            changePopupCardInfo={() => changePopupCardInfo(item)}
           />
         ))}
         {isEditable ? (
@@ -73,6 +74,7 @@ type ColumnProps = {
     deleteCard: (columnId: number, cardId: number) => void;
     editCard: (columnId: number, cardId: number, newTitle: string) => void;
   };
+  changePopupCardInfo: (info: CardType) => void;
 };
 
 const Content = styled.div`

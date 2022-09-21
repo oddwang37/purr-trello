@@ -5,27 +5,25 @@ import { Overlay, CloseButton } from 'components';
 import { Description } from './Description';
 import { Comments } from './Comments';
 import { CardSvg } from 'components/svg';
+import { CardType } from 'types/columns';
 
-const Card: FC<CardProps> = ({ closeCard, isOpened }) => {
+const Card: FC<CardProps> = ({ cardInfo, closeCard, isOpened }) => {
+  const { id, title, description, comments } = cardInfo;
+
   return (
     <Overlay isOpened={isOpened}>
       <Root>
         <FlexWrapper>
           <CardSvg />
-          <SectionTitle>Card name</SectionTitle>
+          <Title>{title}</Title>
         </FlexWrapper>
         <Column>
           In <ColumnTitle>In Progress</ColumnTitle> column
           <br />
           by username
         </Column>
-        <Description description="some descr" />
-        <Comments
-          comments={[
-            { text: 'Some comment', date: '12/11/2022', id: 0 },
-            { text: 'Nice comment awesome description', date: '11/12/2022', id: 1 },
-          ]}
-        />
+        <Description description={description} />
+        <Comments comments={comments} />
         <CloseButton closeModal={closeCard} />
       </Root>
     </Overlay>
@@ -35,6 +33,7 @@ const Card: FC<CardProps> = ({ closeCard, isOpened }) => {
 export default Card;
 
 type CardProps = {
+  cardInfo: CardType;
   closeCard: () => void;
   isOpened: boolean;
 };
@@ -53,7 +52,7 @@ const FlexWrapper = styled.div`
   display: flex;
   gap: 10px;
 `;
-const SectionTitle = styled.div`
+const Title = styled.div`
   font-size: 16px;
   font-weight: 700;
 `;
