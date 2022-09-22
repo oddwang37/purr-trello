@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
-import { ColumnsType, CardType } from 'types/columns';
+import { ColumnsType } from 'types/columns';
 import { Columns, Header, LoginModal, Card } from 'components';
 
 const App = () => {
@@ -40,18 +40,7 @@ const App = () => {
       ],
     },
   ]);
-
-  const [popupCardInfo, setPopupCardInfo] = useState<CardType>({
-    id: 0,
-    title: '',
-    description: '',
-    comments: [],
-  });
-
-  const changePopupCardInfo = (info: CardType) => {
-    setPopupCardInfo(info);
-    openCard();
-  };
+  // ---------- Popups states -------------------
 
   const [isModalOpened, setModalOpened] = useState<boolean>(false);
 
@@ -59,11 +48,18 @@ const App = () => {
     setModalOpened(false);
   };
 
-  const [isCardOpened, setCardOpened] = useState<boolean>(true);
+  const [isCardOpened, setCardOpened] = useState<boolean>(false);
 
   const openCard = () => setCardOpened(true);
   const closeCard = () => setCardOpened(false);
 
+  // first is columnd id, second is card id
+  const [popupCardIds, setPopupCardIds] = useState<number[]>([0, 0]);
+
+  const changePopupCardIds = (columnId: number, cardId: number) => {
+    setPopupCardIds([columnId, cardId]);
+    openCard();
+  };
   //  --------------------- Actions with columns -----------------
 
   const cloneColumns = (array: ColumnsType) => {
@@ -86,7 +82,7 @@ const App = () => {
     newColumns[columnId].cards = newCards;
     setColumnsInfo(newColumns);
   };
-  const editCard = (columnId: number, cardId: number, newTitle: string) => {
+  const editCardTitle = (columnId: number, cardId: number, newTitle: string) => {
     const newColumns = cloneColumns(columnsInfo);
     const newCards = newColumns[columnId].cards.map((item) => {
       if (item.id === cardId) {
@@ -97,18 +93,57 @@ const App = () => {
     setColumnsInfo(newColumns);
   };
 
+  //edit description works only with current card info on popup
+  const editDescription = (newDescr: string) => {
+    const columnId = popupCardIds[0];
+    const cardId = popupCardIds[1];
+    const newColumns = cloneColumns(columnsInfo);
+    const newCards = newColumns[columnId].cards.map((item) => {
+      if (item.id === cardId) {
+        return { ...item, description: newDescr };
+      } else return item;
+    });
+    newColumns[columnId].cards = newCards;
+    setColumnsInfo(newColumns);
+  };
+
+  const getPopupCard = () => {
+    const columnId = popupCardIds[0];
+    const cardId = popupCardIds[1];
+    const column = columnsInfo[columnId];
+    const columnTitle = column.title;
+    const card = column.cards.filter((item) => item.id === cardId);
+    return {
+      cardInfo: card[0],
+      columnId: columnId,
+      cardId: cardId,
+      columnTitle,
+    };
+  };
+
   const cardsActions = {
     addCard,
     deleteCard,
-    editCard,
-    changePopupCardInfo,
+    editCardTitle,
+    changePopupCardIds,
   };
+
+  const cardPopupActions = {
+    getPopupCard,
+    editDescription,
+    closeCard,
+  };
+
+  useEffect(() => {
+    editDescription('new descr');
+  }, []);
+
   return (
     <Root>
       <Header username="username" />
       <Columns columnsInfo={columnsInfo} cardsActions={cardsActions} />
       <LoginModal closeModal={closeModal} isOpened={isModalOpened} />
-      <Card cardInfo={popupCardInfo} closeCard={closeCard} isOpened={isCardOpened} />
+      <Card cardPopupActions={cardPopupActions} isOpened={isCardOpened} />
     </Root>
   );
 };

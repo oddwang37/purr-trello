@@ -7,8 +7,10 @@ import { Comments } from './Comments';
 import { CardSvg } from 'components/svg';
 import { CardType } from 'types/columns';
 
-const Card: FC<CardProps> = ({ cardInfo, closeCard, isOpened }) => {
-  const { id, title, description, comments } = cardInfo;
+const Card: FC<CardProps> = ({ cardPopupActions, isOpened }) => {
+  const { getPopupCard, editDescription, closeCard } = cardPopupActions;
+  const { cardInfo, columnId, cardId, columnTitle } = getPopupCard();
+  const { title, description, comments } = cardInfo;
 
   return (
     <Overlay isOpened={isOpened}>
@@ -18,11 +20,15 @@ const Card: FC<CardProps> = ({ cardInfo, closeCard, isOpened }) => {
           <Title>{title}</Title>
         </FlexWrapper>
         <Column>
-          In <ColumnTitle>In Progress</ColumnTitle> column
+          In <ColumnTitle>{columnTitle}</ColumnTitle> column
           <br />
           by username
         </Column>
-        <Description description={description} />
+        <Description
+          description={description}
+          editDescription={editDescription}
+          updatePopupCard={getPopupCard}
+        />
         <Comments comments={comments} />
         <CloseButton closeModal={closeCard} />
       </Root>
@@ -33,8 +39,16 @@ const Card: FC<CardProps> = ({ cardInfo, closeCard, isOpened }) => {
 export default Card;
 
 type CardProps = {
-  cardInfo: CardType;
-  closeCard: () => void;
+  cardPopupActions: {
+    getPopupCard: () => {
+      cardInfo: CardType;
+      columnId: number;
+      cardId: number;
+      columnTitle: string;
+    };
+    editDescription: (newDescription: string) => void;
+    closeCard: () => void;
+  };
   isOpened: boolean;
 };
 const Root = styled.div`

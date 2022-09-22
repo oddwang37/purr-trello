@@ -1,11 +1,11 @@
 import React, { FC, useState } from 'react';
 import styled from 'styled-components';
 
-import { CardsType, CardType } from 'types/columns';
+import { CardsType } from 'types/columns';
 import { CardPreview, SaveButton } from 'components';
 
-const Column: FC<ColumnProps> = ({ id, title, cards, cardsActions, changePopupCardInfo }) => {
-  const { addCard, deleteCard, editCard } = cardsActions;
+const Column: FC<ColumnProps> = ({ id, title, cards, cardsActions }) => {
+  const { addCard, editCardTitle, changePopupCardIds } = cardsActions;
 
   const [isEditable, setIsEditable] = useState<boolean>(false);
 
@@ -33,8 +33,8 @@ const Column: FC<ColumnProps> = ({ id, title, cards, cardsActions, changePopupCa
             cardId={item.id}
             columnId={id}
             key={item.id}
-            editCard={editCard}
-            changePopupCardInfo={() => changePopupCardInfo(item)}
+            editCardTitle={editCardTitle}
+            changePopupCardIds={() => changePopupCardIds(id, item.id)}
           />
         ))}
         {isEditable ? (
@@ -72,9 +72,9 @@ type ColumnProps = {
   cardsActions: {
     addCard: (columnId: number, title: string) => void;
     deleteCard: (columnId: number, cardId: number) => void;
-    editCard: (columnId: number, cardId: number, newTitle: string) => void;
+    editCardTitle: (columnId: number, cardId: number, newTitle: string) => void;
+    changePopupCardIds: (columnId: number, cardId: number) => void;
   };
-  changePopupCardInfo: (info: CardType) => void;
 };
 
 const Content = styled.div`

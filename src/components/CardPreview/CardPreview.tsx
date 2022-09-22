@@ -8,8 +8,8 @@ const CardPreview: FC<CardPreviewProps> = ({
   title,
   columnId,
   cardId,
-  editCard,
-  changePopupCardInfo,
+  editCardTitle,
+  changePopupCardIds,
 }) => {
   const [isEditable, setIsEditable] = useState<boolean>(false);
 
@@ -23,7 +23,7 @@ const CardPreview: FC<CardPreviewProps> = ({
   };
 
   const onClickSave = () => {
-    editCard(columnId, cardId, textareaVal);
+    editCardTitle(columnId, cardId, textareaVal);
     disableEdit();
   };
 
@@ -35,7 +35,7 @@ const CardPreview: FC<CardPreviewProps> = ({
           <SaveButton onClick={onClickSave}>Save</SaveButton>
         </EditInterface>
       ) : (
-        <Title onClick={changePopupCardInfo}>
+        <Title onClick={changePopupCardIds}>
           <div>{title}</div>
           <EditButton onClick={enableEdit}>
             <EditSvg />
@@ -52,8 +52,8 @@ type CardPreviewProps = {
   title: string;
   columnId: number;
   cardId: number;
-  editCard: (columnId: number, cardId: number, newTitle: string) => void;
-  changePopupCardInfo: () => void;
+  editCardTitle: (columnId: number, cardId: number, newTitle: string) => void;
+  changePopupCardIds: () => void;
 };
 
 const Title = styled.div`
