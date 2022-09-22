@@ -1,8 +1,8 @@
 export type Comment = { id: number; date: string; text: string };
 
-export type Comments = Comment[] | [];
+export type Comments = Comment[];
 
-export type CardType = { id: number; title: string; description: string; comments: [] };
+export type CardType = { id: number; title: string; description: string; comments: Comments };
 
 export type CardsType = CardType[];
 

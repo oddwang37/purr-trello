@@ -8,7 +8,7 @@ import { CardSvg } from 'components/svg';
 import { CardType } from 'types/columns';
 
 const Card: FC<CardProps> = ({ cardPopupActions, isOpened }) => {
-  const { getPopupCard, editDescription, closeCard } = cardPopupActions;
+  const { getPopupCard, editDescription, addComment, closeCard } = cardPopupActions;
   const { cardInfo, columnId, cardId, columnTitle } = getPopupCard();
   const { title, description, comments } = cardInfo;
 
@@ -29,7 +29,7 @@ const Card: FC<CardProps> = ({ cardPopupActions, isOpened }) => {
           editDescription={editDescription}
           updatePopupCard={getPopupCard}
         />
-        <Comments comments={comments} />
+        <Comments comments={comments} addComment={addComment} />
         <CloseButton closeModal={closeCard} />
       </Root>
     </Overlay>
@@ -47,6 +47,7 @@ type CardProps = {
       columnTitle: string;
     };
     editDescription: (newDescription: string) => void;
+    addComment: (commentText: string) => void;
     closeCard: () => void;
   };
   isOpened: boolean;

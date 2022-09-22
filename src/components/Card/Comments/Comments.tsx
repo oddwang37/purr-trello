@@ -5,7 +5,7 @@ import { CommentsSvg, AvatarSvg } from 'components/svg';
 import { SaveButton, CancelButton, ButtonsWrapper } from 'components/Card/Description/Description';
 import { Comment } from './Comment';
 
-const Comments: FC<CommentsProps> = ({ comments }) => {
+const Comments: FC<CommentsProps> = ({ comments, addComment }) => {
   const [isEditable, setIsEditable] = useState<boolean>(false);
 
   const enableEdit = () => setIsEditable(true);
@@ -15,6 +15,12 @@ const Comments: FC<CommentsProps> = ({ comments }) => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
+  };
+
+  const onClickSend = () => {
+    addComment(inputValue);
+    disableEdit();
+    setInputValue('');
   };
 
   return (
@@ -34,7 +40,7 @@ const Comments: FC<CommentsProps> = ({ comments }) => {
               autoFocus
             />
             <ButtonsWrapper>
-              <SaveButton>Save</SaveButton>
+              <SaveButton onClick={onClickSend}>Send</SaveButton>
               <CancelButton onClick={disableEdit}>Cancel</CancelButton>
             </ButtonsWrapper>
           </CommentSending>
@@ -43,7 +49,7 @@ const Comments: FC<CommentsProps> = ({ comments }) => {
         )}
       </InputWrapper>
       <CommentsSection>
-        {comments.map((item) => (
+        {comments.reverse().map((item) => (
           <Comment text={item.text} date={item.date} key={item.id} />
         ))}
       </CommentsSection>
@@ -55,6 +61,7 @@ export default Comments;
 
 type CommentsProps = {
   comments: { text: string; date: string; id: number }[];
+  addComment: (commentText: string) => void;
 };
 
 const FlexWrapper = styled.div`
@@ -96,4 +103,6 @@ const Field = styled.input`
 `;
 const CommentsSection = styled.div`
   margin-top: 15px;
+  height: 50%;
+  overflow-y: scroll;
 `;

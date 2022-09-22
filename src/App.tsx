@@ -93,20 +93,7 @@ const App = () => {
     setColumnsInfo(newColumns);
   };
 
-  //edit description works only with current card info on popup
-  const editDescription = (newDescr: string) => {
-    const columnId = popupCardIds[0];
-    const cardId = popupCardIds[1];
-    const newColumns = cloneColumns(columnsInfo);
-    const newCards = newColumns[columnId].cards.map((item) => {
-      if (item.id === cardId) {
-        return { ...item, description: newDescr };
-      } else return item;
-    });
-    newColumns[columnId].cards = newCards;
-    setColumnsInfo(newColumns);
-  };
-
+  // get info about current popup card
   const getPopupCard = () => {
     const columnId = popupCardIds[0];
     const cardId = popupCardIds[1];
@@ -121,6 +108,45 @@ const App = () => {
     };
   };
 
+  //edit description works only with current card info on popup
+  const editDescription = (newDescr: string) => {
+    const columnId = popupCardIds[0];
+    const cardId = popupCardIds[1];
+    const newColumns = cloneColumns(columnsInfo);
+    const newCards = newColumns[columnId].cards.map((item) => {
+      if (item.id === cardId) {
+        return { ...item, description: newDescr };
+      } else return item;
+    });
+    newColumns[columnId].cards = newCards;
+    setColumnsInfo(newColumns);
+  };
+
+  const addComment = (commentText: string) => {
+    const columnId = popupCardIds[0];
+    const cardId = popupCardIds[1];
+    const newColumns = cloneColumns(columnsInfo);
+    const oldCards = newColumns[columnId].cards;
+    const newCards = oldCards.map((item) => {
+      if (item.id === cardId) {
+        if (item.comments.length === 0) {
+          const newComments = [{ id: rand(), date: '11/12/2022', text: commentText }];
+          return { ...item, comments: newComments };
+        } else {
+          const oldComments = [...item.comments];
+          return {
+            ...item,
+            comments: [...oldComments, { id: rand(), date: '11/12/2022', text: commentText }],
+          };
+        }
+      } else {
+        return item;
+      }
+    });
+    newColumns[columnId].cards = newCards;
+    setColumnsInfo(newColumns);
+  };
+
   const cardsActions = {
     addCard,
     deleteCard,
@@ -131,12 +157,11 @@ const App = () => {
   const cardPopupActions = {
     getPopupCard,
     editDescription,
+    addComment,
     closeCard,
   };
 
-  useEffect(() => {
-    editDescription('new descr');
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <Root>
