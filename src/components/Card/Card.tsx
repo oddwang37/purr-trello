@@ -8,10 +8,14 @@ import { CardSvg } from 'components/svg';
 import { CardType } from 'types/columns';
 
 const Card: FC<CardProps> = ({ cardPopupActions, isOpened }) => {
-  const { getPopupCard, editDescription, addComment, closeCard } = cardPopupActions;
+  const { getPopupCard, deleteCard, editDescription, addComment, closeCard } = cardPopupActions;
   const { cardInfo, columnId, cardId, columnTitle } = getPopupCard();
   const { title, description, comments } = cardInfo;
 
+  const onClickDelete = () => {
+    deleteCard();
+    closeCard();
+  };
   return (
     <Overlay isOpened={isOpened}>
       <Root>
@@ -31,6 +35,7 @@ const Card: FC<CardProps> = ({ cardPopupActions, isOpened }) => {
         />
         <Comments comments={comments} addComment={addComment} />
         <CloseButton closeModal={closeCard} />
+        <DeleteCard onClick={onClickDelete}>Delete card</DeleteCard>
       </Root>
     </Overlay>
   );
@@ -46,6 +51,7 @@ type CardProps = {
       cardId: number;
       columnTitle: string;
     };
+    deleteCard: () => void;
     editDescription: (newDescription: string) => void;
     addComment: (commentText: string) => void;
     closeCard: () => void;
@@ -78,4 +84,22 @@ const Column = styled.div`
 `;
 const ColumnTitle = styled.span`
   text-decoration: underline;
+`;
+const DeleteCard = styled.div`
+  font-size: 14px;
+  position: absolute;
+  right: 10px;
+  top: 30%;
+  color: #ff1a4c;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  height: 30px;
+  padding: 5px 0;
+  border-radius: 5px;
+  background-color: rgba(0, 0, 0, 0);
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
 `;

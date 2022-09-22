@@ -76,12 +76,6 @@ const App = () => {
     newColumns[columnId].cards.push({ id: rand(), title, description: '', comments: [] });
     setColumnsInfo(newColumns);
   };
-  const deleteCard = (columnId: number, cardId: number) => {
-    const newColumns = cloneColumns(columnsInfo);
-    const newCards = newColumns[columnId].cards.filter((item) => item.id !== cardId);
-    newColumns[columnId].cards = newCards;
-    setColumnsInfo(newColumns);
-  };
   const editCardTitle = (columnId: number, cardId: number, newTitle: string) => {
     const newColumns = cloneColumns(columnsInfo);
     const newCards = newColumns[columnId].cards.map((item) => {
@@ -106,6 +100,16 @@ const App = () => {
       cardId: cardId,
       columnTitle,
     };
+  };
+
+  const deleteCard = () => {
+    const columnId = popupCardIds[0];
+    const cardId = popupCardIds[1];
+    const newColumns = cloneColumns(columnsInfo);
+    const newCards = newColumns[columnId].cards.filter((item) => item.id !== cardId);
+    newColumns[columnId].cards = newCards;
+    setPopupCardIds([0, 0]);
+    setColumnsInfo(newColumns);
   };
 
   //edit description works only with current card info on popup
@@ -156,6 +160,7 @@ const App = () => {
 
   const cardPopupActions = {
     getPopupCard,
+    deleteCard,
     editDescription,
     addComment,
     closeCard,
