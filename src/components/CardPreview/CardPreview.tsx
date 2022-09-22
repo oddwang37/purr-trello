@@ -27,6 +27,11 @@ const CardPreview: FC<CardPreviewProps> = ({
     disableEdit();
   };
 
+  const onClickEdit = (e: React.MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
+    enableEdit();
+  };
+
   return (
     <>
       {isEditable ? (
@@ -37,7 +42,7 @@ const CardPreview: FC<CardPreviewProps> = ({
       ) : (
         <Title onClick={changePopupCardIds}>
           <div>{title}</div>
-          <EditButton onClick={enableEdit}>
+          <EditButton onClick={onClickEdit}>
             <EditSvg />
           </EditButton>
         </Title>
