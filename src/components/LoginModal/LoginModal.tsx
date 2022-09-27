@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import styled from 'styled-components';
 
-import { Overlay, Input, Button, CloseButton } from 'components';
+import { Overlay, Input, Button } from 'components';
 
 const LoginModal: FC<LoginModalProps> = ({ changeUsername, isOpened, closeModal }) => {
   const [inputVal, setInputVal] = useState<string>('');
@@ -20,7 +20,6 @@ const LoginModal: FC<LoginModalProps> = ({ changeUsername, isOpened, closeModal 
         <Title>Enter your name</Title>
         <Input onChange={handleChange} value={inputVal} />
         <Button onClick={onSubmitClick}>Submit</Button>
-        <CloseButton closeModal={closeModal} />
       </Root>
     </Overlay>
   );
