@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
 import { Overlay, CloseButton } from 'components';
@@ -8,12 +8,32 @@ import { CardSvg } from 'components/svg';
 import { CardType } from 'types/columns';
 
 const Card: FC<CardProps> = ({ username, cardInfo, cardPopupActions, isOpened }) => {
-  const { getPopupCard, deleteCard, editDescription, addComment, closeCard } = cardPopupActions;
+  const { getPopupCard, deleteCard, editCardTitle, editDescription, addComment, closeCard } =
+    cardPopupActions;
 
   const onClickDelete = () => {
     deleteCard();
     closeCard();
   };
+
+  const titleInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = ({ target }: MouseEvent) => {
+      if (!titleInputRef.current?.contains(target as Node)) {
+        console.log('done');
+        if (titleInputRef.current) {
+          console.log(titleInputRef.current.value);
+          editCardTitle(cardInfo.id, titleInputRef.current.value);
+        }
+      }
+    };
+    document.addEventListener('click', handleClickOutside, true);
+    return () => {
+      document.removeEventListener('click', handleClickOutside, true);
+    };
+  }, [editCardTitle]);
+
   return (
     <>
       {cardInfo ? (
@@ -21,7 +41,7 @@ const Card: FC<CardProps> = ({ username, cardInfo, cardPopupActions, isOpened })
           <Root>
             <FlexWrapper>
               <CardSvg />
-              <Title defaultValue={cardInfo?.title} />
+              <Title defaultValue={cardInfo?.title} ref={titleInputRef} />
             </FlexWrapper>
             <Column>
               columnTitle In <ColumnTitle>{cardInfo?.title}</ColumnTitle> column
