@@ -1,15 +1,25 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import styled from 'styled-components';
 
 import { Overlay, Input, Button, CloseButton } from 'components';
 
-const LoginModal: FC<LoginModalProps> = ({ isOpened, closeModal }) => {
+const LoginModal: FC<LoginModalProps> = ({ changeUsername, isOpened, closeModal }) => {
+  const [inputVal, setInputVal] = useState<string>('');
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputVal(e.target.value);
+  };
+
+  const onSubmitClick = () => {
+    changeUsername(inputVal);
+    closeModal();
+  };
   return (
     <Overlay isOpened={isOpened}>
       <Root>
         <Title>Enter your name</Title>
-        <Input />
-        <Button>Submit</Button>
+        <Input onChange={handleChange} value={inputVal} />
+        <Button onClick={onSubmitClick}>Submit</Button>
         <CloseButton closeModal={closeModal} />
       </Root>
     </Overlay>
@@ -19,6 +29,7 @@ const LoginModal: FC<LoginModalProps> = ({ isOpened, closeModal }) => {
 export default LoginModal;
 
 type LoginModalProps = {
+  changeUsername: (newName: string) => void;
   isOpened: boolean;
   closeModal: () => void;
 };

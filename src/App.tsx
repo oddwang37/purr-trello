@@ -27,6 +27,12 @@ const App = () => {
       cards: [],
     },
   ];
+  const [username, setUsername] = useState<string>('');
+
+  const changeUsername = (newName: string) => {
+    setUsername(newName);
+    saveUsername(newName);
+  };
   const [columns, setColumns] = useState<ColumnsType>(initialColumns);
   const [cards, setCards] = useState<CardsType>([
     {
@@ -38,7 +44,7 @@ const App = () => {
   ]);
   // ---------- Popups states -------------------
 
-  const [isModalOpened, setModalOpened] = useState<boolean>(false);
+  const [isModalOpened, setModalOpened] = useState<boolean>(true);
 
   const closeModal = () => {
     setModalOpened(false);
@@ -185,27 +191,44 @@ const App = () => {
     localStorage.setItem('cards', JSON.stringify(cards));
   };
 
+  const saveUsername = (username: string) => {
+    localStorage.setItem('username', username);
+  };
+
+  const getUsername = () => {
+    const storageUsername = localStorage.getItem('username');
+    if (storageUsername) {
+      setUsername(storageUsername);
+      closeModal();
+    }
+  };
   const getStorageColumns = () => {
-    const columns = JSON.parse(`${localStorage.getItem('columns')}`);
-    setColumns(columns || initialColumns);
+    const storageColumns = JSON.parse(`${localStorage.getItem('columns')}`);
+    setColumns(storageColumns || initialColumns);
   };
 
   const getStorageCards = () => {
-    const cards = JSON.parse(`${localStorage.getItem('cards')}`);
-    setCards(cards || []);
+    const storageCards = JSON.parse(`${localStorage.getItem('cards')}`);
+    setCards(storageCards || []);
   };
 
   useEffect(() => {
+    getUsername();
     getStorageColumns();
     getStorageCards();
   }, []);
 
   return (
     <Root>
-      <Header username="username" />
+      <Header username={username} />
       <Columns columns={columns} cards={cards} cardsActions={cardsActions} />
-      <LoginModal closeModal={closeModal} isOpened={isModalOpened} />
+      <LoginModal
+        changeUsername={changeUsername}
+        closeModal={closeModal}
+        isOpened={isModalOpened}
+      />
       <Card
+        username={username}
         cardInfo={getPopupCard(popupCardId)}
         cardPopupActions={cardPopupActions}
         isOpened={isCardOpened}

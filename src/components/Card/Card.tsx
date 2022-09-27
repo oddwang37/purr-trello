@@ -7,7 +7,7 @@ import { Comments } from './Comments';
 import { CardSvg } from 'components/svg';
 import { CardType } from 'types/columns';
 
-const Card: FC<CardProps> = ({ cardInfo, cardPopupActions, isOpened }) => {
+const Card: FC<CardProps> = ({ username, cardInfo, cardPopupActions, isOpened }) => {
   const { getPopupCard, deleteCard, editDescription, addComment, closeCard } = cardPopupActions;
 
   const onClickDelete = () => {
@@ -26,7 +26,7 @@ const Card: FC<CardProps> = ({ cardInfo, cardPopupActions, isOpened }) => {
             <Column>
               columnTitle In <ColumnTitle>{cardInfo?.title}</ColumnTitle> column
               <br />
-              by username
+              by {username}
             </Column>
             <Description
               description={cardInfo.description}
@@ -39,7 +39,7 @@ const Card: FC<CardProps> = ({ cardInfo, cardPopupActions, isOpened }) => {
           </Root>
         </Overlay>
       ) : (
-        <div>Error</div>
+        <div></div>
       )}
     </>
   );
@@ -48,6 +48,7 @@ const Card: FC<CardProps> = ({ cardInfo, cardPopupActions, isOpened }) => {
 export default Card;
 
 type CardProps = {
+  username: string;
   cardInfo: CardType;
   cardPopupActions: {
     getPopupCard: (cardId: number) => CardType;
