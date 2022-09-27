@@ -7,10 +7,8 @@ import { Comments } from './Comments';
 import { CardSvg } from 'components/svg';
 import { CardType } from 'types/columns';
 
-const Card: FC<CardProps> = ({ cardPopupActions, isOpened }) => {
+const Card: FC<CardProps> = ({ cardInfo, cardPopupActions, isOpened }) => {
   const { getPopupCard, deleteCard, editDescription, addComment, closeCard } = cardPopupActions;
-  const { cardInfo, columnId, cardId, columnTitle } = getPopupCard();
-  const { title, description, comments } = cardInfo;
 
   const onClickDelete = () => {
     deleteCard();
@@ -21,19 +19,19 @@ const Card: FC<CardProps> = ({ cardPopupActions, isOpened }) => {
       <Root>
         <FlexWrapper>
           <CardSvg />
-          <Title>{title}</Title>
+          <Title defaultValue={cardInfo?.title} />
         </FlexWrapper>
         <Column>
-          In <ColumnTitle>{columnTitle}</ColumnTitle> column
+          columnTitle In <ColumnTitle>{cardInfo?.title}</ColumnTitle> column
           <br />
           by username
         </Column>
         <Description
-          description={description}
+          description={cardInfo.description}
           editDescription={editDescription}
-          updatePopupCard={getPopupCard}
+          updatePopupCard={() => getPopupCard(cardInfo.id)}
         />
-        <Comments comments={comments} addComment={addComment} />
+        <Comments comments={cardInfo.comments} addComment={addComment} />
         <CloseButton closeModal={closeCard} />
         <DeleteCard onClick={onClickDelete}>Delete card</DeleteCard>
       </Root>
@@ -44,14 +42,11 @@ const Card: FC<CardProps> = ({ cardPopupActions, isOpened }) => {
 export default Card;
 
 type CardProps = {
+  cardInfo: CardType;
   cardPopupActions: {
-    getPopupCard: () => {
-      cardInfo: CardType;
-      columnId: number;
-      cardId: number;
-      columnTitle: string;
-    };
+    getPopupCard: (cardId: number) => CardType;
     deleteCard: () => void;
+    editCardTitle: (cardId: number, newTitle: string) => void;
     editDescription: (newDescription: string) => void;
     addComment: (commentText: string) => void;
     closeCard: () => void;
@@ -73,9 +68,13 @@ const FlexWrapper = styled.div`
   display: flex;
   gap: 10px;
 `;
-const Title = styled.div`
+const Title = styled.input`
+  border: none;
   font-size: 16px;
   font-weight: 700;
+  width: 450px;
+  font-family: Arial, Helvetica, sans-serif;
+  padding: 4px;
 `;
 const Column = styled.div`
   font-size: 12px;

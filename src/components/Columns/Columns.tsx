@@ -1,18 +1,21 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
 
-import { ColumnType, ColumnsType } from 'types/columns';
+import { ColumnType, ColumnsType, CardsType } from 'types/columns';
 import Column from './Column/Column';
 
-const Columns: FC<ColumnsProps> = ({ columnsInfo, cardsActions }) => {
+const Columns: FC<ColumnsProps> = ({ columns, cards, cardsActions }) => {
+  const { getColumnCards } = cardsActions;
+
   return (
     <Root>
-      {columnsInfo.map((item: ColumnType) => {
+      {columns.map((item: ColumnType) => {
         return (
           <Column
             id={item.id}
             title={item.title}
-            cards={item.cards}
+            cardsIds={item.cards}
+            cards={getColumnCards(item.id)}
             key={item.id}
             cardsActions={cardsActions}
           />
@@ -25,12 +28,14 @@ const Columns: FC<ColumnsProps> = ({ columnsInfo, cardsActions }) => {
 export default Columns;
 
 type ColumnsProps = {
-  columnsInfo: ColumnsType;
+  columns: ColumnsType;
+  cards: CardsType;
   cardsActions: {
     addCard: (columnId: number, title: string) => void;
     deleteCard: (columnId: number, cardId: number) => void;
-    editCardTitle: (columnId: number, cardId: number, newTitle: string) => void;
-    changePopupCardIds: (columnId: number, cardId: number) => void;
+    editCardTitle: (cardId: number, newTitle: string) => void;
+    changePopupCardId: (cardId: number) => void;
+    getColumnCards: (columnId: number) => CardsType;
   };
 };
 

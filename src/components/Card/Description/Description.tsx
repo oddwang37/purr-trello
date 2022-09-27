@@ -3,7 +3,11 @@ import styled from 'styled-components';
 
 import { DescriptionSvg } from 'components/svg';
 
-const Description: FC<DescriptionProps> = ({ description, editDescription, updatePopupCard }) => {
+const Description: FC<DescriptionProps> = ({
+  description = '',
+  editDescription,
+  updatePopupCard,
+}) => {
   const [isEditable, setIsEditable] = useState<boolean>(false);
 
   const enableEdit = () => {

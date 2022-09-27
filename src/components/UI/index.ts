@@ -1,5 +1,6 @@
 import { Overlay } from './Overlay';
-import { Button, SaveButton } from './Button';
+import { Button } from './Button';
+import { SaveButton } from './SaveButton';
 import { Input } from './Input';
 import { CloseButton } from './CloseButton';
 

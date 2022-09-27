@@ -48,11 +48,15 @@ const Comments: FC<CommentsProps> = ({ comments, addComment }) => {
           <CommentButton onClick={enableEdit}>Add a comment...</CommentButton>
         )}
       </InputWrapper>
-      <CommentsSection>
-        {comments.reverse().map((item) => (
-          <Comment text={item.text} date={item.date} key={item.id} />
-        ))}
-      </CommentsSection>
+      {comments ? (
+        <CommentsSection>
+          {comments.reverse().map((item) => (
+            <Comment text={item.text} date={item.date} key={item.id} />
+          ))}
+        </CommentsSection>
+      ) : (
+        <div></div>
+      )}
     </>
   );
 };
@@ -60,7 +64,7 @@ const Comments: FC<CommentsProps> = ({ comments, addComment }) => {
 export default Comments;
 
 type CommentsProps = {
-  comments: { text: string; date: string; id: number }[];
+  comments?: { text: string; date: string; id: number }[];
   addComment: (commentText: string) => void;
 };
 

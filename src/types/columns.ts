@@ -6,13 +6,19 @@ export type CardType = { id: number; title: string; description: string; comment
 
 export type CardsType = CardType[];
 
-export type ColumnType = { id: number; title: string; cards: CardsType };
+type id = number;
+
+export type ColumnType = {
+  id: number;
+  title: string;
+  cards: id[];
+};
 
 export type ColumnsType = ColumnType[];
 
-export type CardPopupType = {
-  id: number;
-  title: string;
-  description: string;
-  comments: [];
+export type PopupCardType = {
+  cardInfo: CardType;
+  columnId: number;
+  cardId: number;
+  columnTitle: string;
 };
