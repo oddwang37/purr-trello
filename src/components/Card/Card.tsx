@@ -15,27 +15,33 @@ const Card: FC<CardProps> = ({ cardInfo, cardPopupActions, isOpened }) => {
     closeCard();
   };
   return (
-    <Overlay isOpened={isOpened}>
-      <Root>
-        <FlexWrapper>
-          <CardSvg />
-          <Title defaultValue={cardInfo?.title} />
-        </FlexWrapper>
-        <Column>
-          columnTitle In <ColumnTitle>{cardInfo?.title}</ColumnTitle> column
-          <br />
-          by username
-        </Column>
-        <Description
-          description={cardInfo.description}
-          editDescription={editDescription}
-          updatePopupCard={() => getPopupCard(cardInfo.id)}
-        />
-        <Comments comments={cardInfo.comments} addComment={addComment} />
-        <CloseButton closeModal={closeCard} />
-        <DeleteCard onClick={onClickDelete}>Delete card</DeleteCard>
-      </Root>
-    </Overlay>
+    <>
+      {cardInfo ? (
+        <Overlay isOpened={isOpened}>
+          <Root>
+            <FlexWrapper>
+              <CardSvg />
+              <Title defaultValue={cardInfo?.title} />
+            </FlexWrapper>
+            <Column>
+              columnTitle In <ColumnTitle>{cardInfo?.title}</ColumnTitle> column
+              <br />
+              by username
+            </Column>
+            <Description
+              description={cardInfo.description}
+              editDescription={editDescription}
+              updatePopupCard={() => getPopupCard(cardInfo.id)}
+            />
+            <Comments comments={cardInfo.comments} addComment={addComment} />
+            <CloseButton closeModal={closeCard} />
+            <DeleteCard onClick={onClickDelete}>Delete card</DeleteCard>
+          </Root>
+        </Overlay>
+      ) : (
+        <div>Error</div>
+      )}
+    </>
   );
 };
 

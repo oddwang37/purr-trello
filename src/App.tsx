@@ -5,7 +5,7 @@ import { ColumnsType, CardsType } from 'types/columns';
 import { Columns, Header, LoginModal, Card } from 'components';
 
 const App = () => {
-  const [columns, setColumns] = useState<ColumnsType>([
+  const initialColumns = [
     {
       id: 0,
       title: 'TODO',
@@ -26,7 +26,8 @@ const App = () => {
       title: 'Done',
       cards: [],
     },
-  ]);
+  ];
+  const [columns, setColumns] = useState<ColumnsType>(initialColumns);
   const [cards, setCards] = useState<CardsType>([
     {
       id: 0,
@@ -74,6 +75,7 @@ const App = () => {
     newCards.push({ id, title, description: '', comments: [] });
     setCards(newCards);
     setColumns(newColumns);
+    saveColumnsAndCards();
   };
   const editCardTitle = (cardId: number, newTitle: string) => {
     const oldCards = [...cards];
@@ -83,6 +85,7 @@ const App = () => {
       } else return item;
     });
     setCards(newCards);
+    saveColumnsAndCards();
   };
 
   const findColumnOfCard = (id: number) => {
@@ -110,6 +113,7 @@ const App = () => {
       setCards(newCards);
       setPopupCardId(0);
     }
+    saveColumnsAndCards();
   };
 
   //edit description works only with current card info on popup
@@ -122,6 +126,7 @@ const App = () => {
       } else return item;
     });
     setCards(newCards);
+    saveColumnsAndCards();
   };
 
   const addComment = (commentText: string) => {
@@ -144,6 +149,7 @@ const App = () => {
       }
     });
     setCards(newCards);
+    saveColumnsAndCards();
   };
 
   const getColumnCards = (columnId: number) => {
@@ -173,6 +179,26 @@ const App = () => {
     closeCard,
     editCardTitle,
   };
+
+  const saveColumnsAndCards = () => {
+    localStorage.setItem('columns', JSON.stringify(columns));
+    localStorage.setItem('cards', JSON.stringify(cards));
+  };
+
+  const getStorageColumns = () => {
+    const columns = JSON.parse(`${localStorage.getItem('columns')}`);
+    setColumns(columns || initialColumns);
+  };
+
+  const getStorageCards = () => {
+    const cards = JSON.parse(`${localStorage.getItem('cards')}`);
+    setCards(cards || []);
+  };
+
+  useEffect(() => {
+    getStorageColumns();
+    getStorageCards();
+  }, []);
 
   return (
     <Root>
