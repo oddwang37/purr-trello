@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 import { EditSvg } from 'components/svg';
@@ -36,6 +36,10 @@ const CardPreview: FC<CardPreviewProps> = ({
     changePopupCardId(cardId);
   };
 
+  useEffect(() => {
+    setTextareaVal(title);
+  }, [title]);
+
   return (
     <>
       {isEditable ? (
@@ -66,7 +70,7 @@ type CardPreviewProps = {
 };
 
 const Title = styled.div`
-  height: 32px;
+  min-height: 32px;
   width: 100%;
   padding: 5px 14px;
   background-color: #f5f5f5;

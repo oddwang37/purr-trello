@@ -21,9 +21,7 @@ const Card: FC<CardProps> = ({ username, cardInfo, cardPopupActions, isOpened })
   useEffect(() => {
     const handleClickOutside = ({ target }: MouseEvent) => {
       if (!titleInputRef.current?.contains(target as Node)) {
-        console.log('done');
         if (titleInputRef.current) {
-          console.log(titleInputRef.current.value);
           editCardTitle(cardInfo.id, titleInputRef.current.value);
         }
       }
