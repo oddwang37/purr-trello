@@ -42,6 +42,7 @@ const Column: FC<ColumnProps> = ({ id, title, cardsIds, cardsActions }) => {
             key={item.id}
             editCardTitle={editCardTitle}
             changePopupCardId={changePopupCardId}
+            commentsQ={item.comments.length}
           />
         ))}
         {isEditable ? (

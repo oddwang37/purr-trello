@@ -8,6 +8,7 @@ const CardPreview: FC<CardPreviewProps> = ({
   title,
   columnId,
   cardId,
+  commentsQ,
   editCardTitle,
   changePopupCardId,
 }) => {
@@ -49,10 +50,11 @@ const CardPreview: FC<CardPreviewProps> = ({
         </EditInterface>
       ) : (
         <Title onClick={onClickCard}>
-          <div>{title}</div>
+          {title}
           <EditButton onClick={onClickEdit}>
             <EditSvg />
           </EditButton>
+          {commentsQ > 0 ? <Comments>{commentsQ} comments</Comments> : null}
         </Title>
       )}
     </>
@@ -65,27 +67,30 @@ type CardPreviewProps = {
   title: string;
   columnId: number;
   cardId: number;
+  commentsQ: number;
   editCardTitle: (cardId: number, newTitle: string) => void;
   changePopupCardId: (cardId: number) => void;
 };
 
 const Title = styled.div`
-  min-height: 32px;
   width: 100%;
-  padding: 5px 14px;
+  padding: 5px 14px 2px 5px;
   background-color: #f5f5f5;
   border-radius: 5px;
   margin-bottom: 8px;
   cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   position: relative;
+  overflow: hidden;
   &:hover {
     background-color: #e2e2e2;
   }
 `;
 
+const FlexWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+`;
 const EditButton = styled.div`
   width: 25px;
   height: 25px;
@@ -117,4 +122,8 @@ const EditArea = styled.textarea`
   &:focus {
     outline: 1px solid #000;
   }
+`;
+const Comments = styled.div`
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.3);
 `;
