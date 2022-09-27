@@ -1,11 +1,12 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
 
 import { CardsType } from 'types/columns';
 import { CardPreview, SaveButton } from 'components';
 
-const Column: FC<ColumnProps> = ({ id, title, cardsIds, cardsActions }) => {
-  const { getColumnCards, addCard, editCardTitle, changePopupCardId } = cardsActions;
+const Column: FC<ColumnProps> = ({ id, heading, cardsIds, cardsActions }) => {
+  const { getColumnCards, addCard, editColumnHeading, editCardTitle, changePopupCardId } =
+    cardsActions;
 
   const [cards, setCards] = useState<CardsType>([]);
 
@@ -19,20 +20,34 @@ const Column: FC<ColumnProps> = ({ id, title, cardsIds, cardsActions }) => {
   const enableEdit = () => setIsEditable(true);
   const disableEdit = () => setIsEditable(false);
 
-  const [inputVal, setInputVal] = useState<string>('');
+  const [addingInputVal, setAddingInputVal] = useState<string>('');
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setInputVal(e.target.value);
+    setAddingInputVal(e.target.value);
   };
   const onCardCreate = () => {
-    addCard(id, inputVal);
-    setInputVal('');
+    addCard(id, addingInputVal);
+    setAddingInputVal('');
     setIsEditable(false);
   };
 
+  const [inputHeadingText, setInputHeadingText] = useState<string>('');
+
+  const onHeadingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputHeadingText(e.target.value);
+  };
+
+  const onBlurHeading = () => {
+    editColumnHeading(id, inputHeadingText);
+  };
+
+  useEffect(() => {
+    setInputHeadingText(heading);
+  }, [heading]);
+
   return (
     <Root>
-      <Header>{title}</Header>
+      <Header value={inputHeadingText} onChange={onHeadingChange} onBlur={onBlurHeading} />
       <Content>
         {cards.map((item) => (
           <CardPreview
@@ -51,7 +66,7 @@ const Column: FC<ColumnProps> = ({ id, title, cardsIds, cardsActions }) => {
               placeholder="Enter a card name..."
               autoFocus
               onChange={handleChange}
-              value={inputVal}
+              value={addingInputVal}
             />
             <ButtonsWrapper>
               <SaveButton onClick={onCardCreate}>Create</SaveButton>
@@ -75,7 +90,7 @@ export default Column;
 
 type ColumnProps = {
   id: number;
-  title: string;
+  heading: string;
   cardsIds: number[];
   cards: CardsType;
   cardsActions: {
@@ -84,6 +99,7 @@ type ColumnProps = {
     editCardTitle: (cardId: number, newTitle: string) => void;
     changePopupCardId: (cardId: number) => void;
     getColumnCards: (columnId: number) => CardsType;
+    editColumnHeading: (columnId: number, newHeading: string) => void;
   };
 };
 
@@ -99,13 +115,22 @@ const Root = styled.div`
   box-shadow: 5px 10px 10px rgba(0, 0, 0, 0.3);
 `;
 
-const Header = styled.div`
+const Header = styled.input`
   background-color: #7dadb0;
+  border: none;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
   padding: 10px 24px;
   color: #fff;
   font-weight: 700;
+  font-size: 16px;
+  font-family: Arial, Helvetica, sans-serif;
+  display: block;
+  width: 100%;
+  &:focus {
+    background-color: #fff;
+    color: #000;
+  }
 `;
 const AddCard = styled.div`
   height: 32px;

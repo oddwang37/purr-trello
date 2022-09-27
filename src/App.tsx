@@ -81,7 +81,8 @@ const App = () => {
     newCards.push({ id, title, description: '', comments: [] });
     setCards(newCards);
     setColumns(newColumns);
-    saveColumnsAndCards();
+    localStorage.setItem('cards', JSON.stringify(newCards));
+    localStorage.setItem('columns', JSON.stringify(newColumns));
   };
   const editCardTitle = (cardId: number, newTitle: string) => {
     const oldCards = [...cards];
@@ -91,11 +92,18 @@ const App = () => {
       } else return item;
     });
     setCards(newCards);
-    saveColumnsAndCards();
+    localStorage.setItem('cards', JSON.stringify(newCards));
+  };
+
+  const editColumnHeading = (columnId: number, newHeading: string) => {
+    const newColumns = cloneColumns(columns);
+    newColumns[columnId].heading = newHeading;
+    setColumns(newColumns);
+    localStorage.setItem('columns', JSON.stringify(newColumns));
   };
 
   const findColumnOfCard = (id: number) => {
-    const result = columns.find((item) => item.cards.includes(id));
+    const result = columns.filter((item) => item.cards.includes(id))[0];
     if (result) {
       return result.id;
     }
@@ -119,7 +127,7 @@ const App = () => {
       setCards(newCards);
       setPopupCardId(0);
     }
-    saveColumnsAndCards();
+    localStorage.setItem('columns', JSON.stringify(newColumns));
   };
 
   //edit description works only with current card info on popup
@@ -132,7 +140,7 @@ const App = () => {
       } else return item;
     });
     setCards(newCards);
-    saveColumnsAndCards();
+    localStorage.setItem('cards', JSON.stringify(newCards));
   };
 
   const addComment = (commentText: string) => {
@@ -155,7 +163,7 @@ const App = () => {
       }
     });
     setCards(newCards);
-    saveColumnsAndCards();
+    localStorage.setItem('cards', JSON.stringify(newCards));
   };
 
   const getColumnCards = (columnId: number) => {
@@ -175,6 +183,7 @@ const App = () => {
     editCardTitle,
     changePopupCardId,
     getColumnCards,
+    editColumnHeading,
   };
 
   const cardPopupActions = {
@@ -184,11 +193,6 @@ const App = () => {
     addComment,
     closeCard,
     editCardTitle,
-  };
-
-  const saveColumnsAndCards = () => {
-    localStorage.setItem('columns', JSON.stringify(columns));
-    localStorage.setItem('cards', JSON.stringify(cards));
   };
 
   const saveUsername = (username: string) => {
@@ -203,13 +207,28 @@ const App = () => {
     }
   };
   const getStorageColumns = () => {
-    const storageColumns = JSON.parse(`${localStorage.getItem('columns')}`);
-    setColumns(storageColumns || initialColumns);
+    const storageColumns = localStorage.getItem('columns');
+    if (storageColumns) {
+      setColumns(JSON.parse(storageColumns));
+    } else {
+      setColumns(initialColumns);
+    }
   };
 
   const getStorageCards = () => {
-    const storageCards = JSON.parse(`${localStorage.getItem('cards')}`);
-    setCards(storageCards || []);
+    const storageCards = localStorage.getItem('cards');
+    if (storageCards) {
+      setCards(JSON.parse(storageCards));
+    } else {
+      setCards([
+        {
+          id: 0,
+          title: 'first',
+          description: 'some',
+          comments: [{ id: 0, date: '11/12/2002', text: 'some comment' }],
+        },
+      ]);
+    }
   };
 
   useEffect(() => {

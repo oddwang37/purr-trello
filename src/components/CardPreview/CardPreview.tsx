@@ -73,8 +73,9 @@ type CardPreviewProps = {
 };
 
 const Title = styled.div`
+  min-height: 46px;
   width: 100%;
-  padding: 5px 14px 2px 5px;
+  padding: 5px 15px;
   background-color: #f5f5f5;
   border-radius: 5px;
   margin-bottom: 8px;
@@ -86,11 +87,6 @@ const Title = styled.div`
   }
 `;
 
-const FlexWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-`;
 const EditButton = styled.div`
   width: 25px;
   height: 25px;
@@ -101,6 +97,7 @@ const EditButton = styled.div`
   position: absolute;
   top: 3px;
   right: 5px;
+  background-color: #eeeeee;
   &:hover {
     background-color: #c9c9c9;
   }

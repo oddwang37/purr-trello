@@ -13,7 +13,7 @@ const Columns: FC<ColumnsProps> = ({ columns, cards, cardsActions }) => {
         return (
           <Column
             id={item.id}
-            title={item.heading}
+            heading={item.heading}
             cardsIds={item.cards}
             cards={getColumnCards(item.id)}
             key={item.id}
@@ -36,6 +36,7 @@ type ColumnsProps = {
     editCardTitle: (cardId: number, newTitle: string) => void;
     changePopupCardId: (cardId: number) => void;
     getColumnCards: (columnId: number) => CardsType;
+    editColumnHeading: (columnId: number, newHeading: string) => void;
   };
 };
 

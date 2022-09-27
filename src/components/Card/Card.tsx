@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { Overlay, CloseButton } from 'components';
@@ -16,21 +16,18 @@ const Card: FC<CardProps> = ({ username, cardInfo, cardPopupActions, isOpened })
     closeCard();
   };
 
-  const titleInputRef = useRef<HTMLInputElement>(null);
+  const [inputVal, setInputVal] = useState<string>('');
 
+  const onBlur = () => {
+    editCardTitle(cardInfo.id, inputVal);
+  };
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputVal(e.target.value);
+  };
   useEffect(() => {
-    const handleClickOutside = ({ target }: MouseEvent) => {
-      if (!titleInputRef.current?.contains(target as Node)) {
-        if (titleInputRef.current) {
-          editCardTitle(cardInfo.id, titleInputRef.current.value);
-        }
-      }
-    };
-    document.addEventListener('click', handleClickOutside, true);
-    return () => {
-      document.removeEventListener('click', handleClickOutside, true);
-    };
-  }, [editCardTitle]);
+    cardInfo && setInputVal(cardInfo.title);
+  }, [cardInfo]);
 
   return (
     <>
@@ -39,7 +36,7 @@ const Card: FC<CardProps> = ({ username, cardInfo, cardPopupActions, isOpened })
           <Root>
             <FlexWrapper>
               <CardSvg />
-              <Title defaultValue={cardInfo?.title} ref={titleInputRef} />
+              <Title value={inputVal} onChange={onChange} onBlur={onBlur} />
             </FlexWrapper>
             <Column>
               columnTitle In <ColumnTitle>{cardInfo?.title}</ColumnTitle> column
