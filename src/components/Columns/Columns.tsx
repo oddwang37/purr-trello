@@ -13,7 +13,7 @@ const Columns: FC<ColumnsProps> = ({ columns, cards, cardsActions }) => {
         return (
           <Column
             id={item.id}
-            title={item.title}
+            title={item.heading}
             cardsIds={item.cards}
             cards={getColumnCards(item.id)}
             key={item.id}

@@ -8,22 +8,22 @@ const App = () => {
   const initialColumns = [
     {
       id: 0,
-      title: 'TODO',
+      heading: 'TODO',
       cards: [0],
     },
     {
       id: 1,
-      title: 'In Progress',
+      heading: 'In Progress',
       cards: [],
     },
     {
       id: 2,
-      title: 'Testing',
+      heading: 'Testing',
       cards: [],
     },
     {
       id: 3,
-      title: 'Done',
+      heading: 'Done',
       cards: [],
     },
   ];

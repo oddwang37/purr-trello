@@ -10,7 +10,7 @@ type id = number;
 
 export type ColumnType = {
   id: number;
-  title: string;
+  heading: string;
   cards: id[];
 };
 
