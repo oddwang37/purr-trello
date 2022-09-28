@@ -4,8 +4,14 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { ColumnsType, CardsType } from 'types/columns';
 import { Columns, Header, LoginModal, Card } from 'components';
+import StorageService, { StorageKeys } from 'services/StorageService';
 
 const App = () => {
+  const storage = new StorageService();
+  const cardsKey: StorageKeys = StorageKeys.cards;
+  const columnsKey: StorageKeys = StorageKeys.columns;
+  const usernameKey: StorageKeys = StorageKeys.username;
+
   const initialColumns = [
     {
       id: 'asdasdsad',
@@ -32,7 +38,7 @@ const App = () => {
 
   const changeUsername = (newName: string) => {
     setUsername(newName);
-    saveUsername(newName);
+    storage.setItem(usernameKey, newName);
   };
   const [columns, setColumns] = useState<ColumnsType>(initialColumns);
   const [cards, setCards] = useState<CardsType>([
@@ -84,8 +90,8 @@ const App = () => {
     newCards.push({ id, title, description: '', comments: [] });
     setCards(newCards);
     setColumns(newColumns);
-    localStorage.setItem('cards', JSON.stringify(newCards));
-    localStorage.setItem('columns', JSON.stringify(newColumns));
+    storage.setItem(cardsKey, newCards);
+    storage.setItem(columnsKey, newColumns);
   };
   const editCardTitle = (cardId: string, newTitle: string) => {
     const oldCards = [...cards];
@@ -95,7 +101,7 @@ const App = () => {
       } else return item;
     });
     setCards(newCards);
-    localStorage.setItem('cards', JSON.stringify(newCards));
+    storage.setItem(cardsKey, newCards);
   };
 
   const editColumnHeading = (columnId: string, newHeading: string) => {
@@ -110,7 +116,7 @@ const App = () => {
       }
     });
     setColumns(newColumns);
-    localStorage.setItem('columns', JSON.stringify(newColumns));
+    storage.setItem(columnsKey, newColumns);
   };
 
   const findColumnOfCard = (id: string) => {
@@ -140,7 +146,8 @@ const App = () => {
       const newCards = cards.filter((item) => item.id !== cardId);
       setCards(newCards);
       setPopupCardId('asdsadsad');
-      localStorage.setItem('columns', JSON.stringify(newColumns));
+      storage.setItem(cardsKey, newCards);
+      storage.setItem(columnsKey, newColumns);
     }
   };
 
@@ -154,7 +161,7 @@ const App = () => {
       } else return item;
     });
     setCards(newCards);
-    localStorage.setItem('cards', JSON.stringify(newCards));
+    storage.setItem(cardsKey, newCards);
   };
 
   const addComment = (commentText: string) => {
@@ -177,7 +184,7 @@ const App = () => {
       }
     });
     setCards(newCards);
-    localStorage.setItem('cards', JSON.stringify(newCards));
+    storage.setItem(cardsKey, newCards);
   };
 
   const getColumnCards = (columnId: string) => {
@@ -212,13 +219,9 @@ const App = () => {
     editCardTitle,
   };
 
-  const saveUsername = (username: string) => {
-    localStorage.setItem('username', username);
-  };
-
   const getUsername = () => {
-    const storageUsername = localStorage.getItem('username');
-    if (storageUsername) {
+    const storageUsername = storage.getItem(usernameKey);
+    if (storageUsername && typeof storageUsername === 'string') {
       setUsername(storageUsername);
       closeModal();
     }
