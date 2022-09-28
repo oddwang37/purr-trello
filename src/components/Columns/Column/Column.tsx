@@ -1,8 +1,9 @@
-import React, { FC, useEffect, useState, useRef } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { CardsType } from 'types/columns';
 import { CardPreview, SaveButton } from 'components';
+import { CardsActions } from 'types/stateActions';
 
 const Column: FC<ColumnProps> = ({ id, heading, cardsIds, cardsActions }) => {
   const { getColumnCards, addCard, editColumnHeading, editCardTitle, changePopupCardId } =
@@ -89,18 +90,11 @@ const Column: FC<ColumnProps> = ({ id, heading, cardsIds, cardsActions }) => {
 export default Column;
 
 type ColumnProps = {
-  id: number;
+  id: string;
   heading: string;
-  cardsIds: number[];
+  cardsIds: string[];
   cards: CardsType;
-  cardsActions: {
-    addCard: (columnId: number, title: string) => void;
-    deleteCard: (columnId: number, cardId: number) => void;
-    editCardTitle: (cardId: number, newTitle: string) => void;
-    changePopupCardId: (cardId: number) => void;
-    getColumnCards: (columnId: number) => CardsType;
-    editColumnHeading: (columnId: number, newHeading: string) => void;
-  };
+  cardsActions: CardsActions;
 };
 
 const Content = styled.div`

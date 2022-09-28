@@ -2,10 +2,11 @@ import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { Overlay, CloseButton } from 'components';
-import { Description } from './Description';
+import { Description } from './components/Description';
 import { Comments } from './Comments';
 import { CardSvg } from 'components/svg';
 import { CardType } from 'types/columns';
+import { CardPopupActions } from 'types/stateActions';
 
 const Card: FC<CardProps> = ({ username, cardInfo, cardPopupActions, isOpened }) => {
   const { getPopupCard, deleteCard, editCardTitle, editDescription, addComment, closeCard } =
@@ -65,14 +66,7 @@ export default Card;
 type CardProps = {
   username: string;
   cardInfo: CardType;
-  cardPopupActions: {
-    getPopupCard: (cardId: number) => CardType;
-    deleteCard: () => void;
-    editCardTitle: (cardId: number, newTitle: string) => void;
-    editDescription: (newDescription: string) => void;
-    addComment: (commentText: string) => void;
-    closeCard: () => void;
-  };
+  cardPopupActions: CardPopupActions;
   isOpened: boolean;
 };
 const Root = styled.div`

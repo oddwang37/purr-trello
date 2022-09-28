@@ -1,4 +1,2 @@
-import Comments from './Comments';
-import { Comment } from './Comment';
-
-export { Comments, Comment };
+export { default as Comments } from './Comments';
+export { Comment } from './components/Comment';

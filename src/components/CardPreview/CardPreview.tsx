@@ -65,11 +65,11 @@ export default CardPreview;
 
 type CardPreviewProps = {
   title: string;
-  columnId: number;
-  cardId: number;
+  columnId: string;
+  cardId: string;
   commentsQ: number;
-  editCardTitle: (cardId: number, newTitle: string) => void;
-  changePopupCardId: (cardId: number) => void;
+  editCardTitle: (cardId: string, newTitle: string) => void;
+  changePopupCardId: (cardId: string) => void;
 };
 
 const Title = styled.div`

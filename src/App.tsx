@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { v4 as uuidv4 } from 'uuid';
 
 import { ColumnsType, CardsType } from 'types/columns';
 import { Columns, Header, LoginModal, Card } from 'components';
@@ -7,22 +8,22 @@ import { Columns, Header, LoginModal, Card } from 'components';
 const App = () => {
   const initialColumns = [
     {
-      id: 0,
+      id: 'asdasdsad',
       heading: 'TODO',
-      cards: [0],
+      cards: ['asdsadsad'],
     },
     {
-      id: 1,
+      id: 'sadasdas',
       heading: 'In Progress',
       cards: [],
     },
     {
-      id: 2,
+      id: 'asdasdasd',
       heading: 'Testing',
       cards: [],
     },
     {
-      id: 3,
+      id: 'asdsadsad',
       heading: 'Done',
       cards: [],
     },
@@ -36,10 +37,10 @@ const App = () => {
   const [columns, setColumns] = useState<ColumnsType>(initialColumns);
   const [cards, setCards] = useState<CardsType>([
     {
-      id: 0,
+      id: 'asdsadsad',
       title: 'first',
       description: 'some',
-      comments: [{ id: 0, date: '11/12/2002', text: 'some comment' }],
+      comments: [{ id: 'asdsadsad', date: '11/12/2002', text: 'some comment' }],
     },
   ]);
   // ---------- Popups states -------------------
@@ -56,27 +57,29 @@ const App = () => {
   const closeCard = () => setCardOpened(false);
 
   // first is columnd id, second is card id
-  const [popupCardId, setPopupCardId] = useState<number>(0);
+  const [popupCardId, setPopupCardId] = useState<string>('asdsadsad');
 
-  const changePopupCardId = (cardId: number) => {
+  const changePopupCardId = (cardId: string) => {
     setPopupCardId(cardId);
     openCard();
   };
   //  --------------------- Actions with columns -----------------
 
-  const cloneColumns = (array: ColumnsType) => {
-    const clonedArray = [] as ColumnsType;
-    array.forEach((item) => clonedArray.push(Object.assign({}, item)));
-    return clonedArray;
-  };
-  const rand = () => {
-    const random = Math.random() * 1001;
-    return Math.floor(random);
-  };
-  const addCard = (columnId: number, title: string) => {
-    const id = rand();
-    const newColumns = cloneColumns(columns);
-    newColumns[columnId].cards.push(id);
+  const addCard = (columnId: string, title: string) => {
+    const id = uuidv4();
+    /*     const newColumns = columns.map((item) => ({
+      ...item,
+      cards: [...item.cards],
+    })); */
+    const newColumns = columns.map((item) => {
+      if (item.id === columnId) {
+        const newItem = item;
+        newItem.cards.push(id);
+        return newItem;
+      } else {
+        return item;
+      }
+    });
     const newCards = [...cards];
     newCards.push({ id, title, description: '', comments: [] });
     setCards(newCards);
@@ -84,7 +87,7 @@ const App = () => {
     localStorage.setItem('cards', JSON.stringify(newCards));
     localStorage.setItem('columns', JSON.stringify(newColumns));
   };
-  const editCardTitle = (cardId: number, newTitle: string) => {
+  const editCardTitle = (cardId: string, newTitle: string) => {
     const oldCards = [...cards];
     const newCards = oldCards.map((item) => {
       if (item.id === cardId) {
@@ -95,39 +98,50 @@ const App = () => {
     localStorage.setItem('cards', JSON.stringify(newCards));
   };
 
-  const editColumnHeading = (columnId: number, newHeading: string) => {
-    const newColumns = cloneColumns(columns);
-    newColumns[columnId].heading = newHeading;
+  const editColumnHeading = (columnId: string, newHeading: string) => {
+    // const newColumns = cloneColumns(columns);
+    const newColumns = columns.map((item) => {
+      if (item.id === columnId) {
+        const newColumn = item;
+        newColumn.heading = newHeading;
+        return newColumn;
+      } else {
+        return item;
+      }
+    });
     setColumns(newColumns);
     localStorage.setItem('columns', JSON.stringify(newColumns));
   };
 
-  const findColumnOfCard = (id: number) => {
+  const findColumnOfCard = (id: string) => {
     const result = columns.filter((item) => item.cards.includes(id))[0];
     if (result) {
       return result.id;
     }
   };
   // get info about current popup card
-  const getPopupCard = (cardId: number) => {
+  const getPopupCard = (cardId: string) => {
     const card = cards.filter((item) => item.id === cardId)[0];
     return card;
   };
 
   const deleteCard = () => {
     const cardId = popupCardId;
-    const newColumns = cloneColumns(columns);
     const columnId = findColumnOfCard(cardId);
     if (columnId) {
-      const newColumnCards = newColumns[columnId].cards.filter((item) => item !== cardId);
-      newColumns[columnId].cards = newColumnCards;
+      const newColumns = columns.map((column) => {
+        if (column.id === columnId) {
+          return { ...column, cards: column.cards.filter((card) => card !== cardId) };
+        } else {
+          return column;
+        }
+      });
       setColumns(newColumns);
-      const oldCards = [...cards];
-      const newCards = oldCards.filter((item) => item.id !== cardId);
+      const newCards = cards.filter((item) => item.id !== cardId);
       setCards(newCards);
-      setPopupCardId(0);
+      setPopupCardId('asdsadsad');
+      localStorage.setItem('columns', JSON.stringify(newColumns));
     }
-    localStorage.setItem('columns', JSON.stringify(newColumns));
   };
 
   //edit description works only with current card info on popup
@@ -149,13 +163,13 @@ const App = () => {
     const newCards = oldCards.map((item) => {
       if (item.id === cardId) {
         if (item.comments.length === 0) {
-          const newComments = [{ id: rand(), date: '11/12/2022', text: commentText }];
+          const newComments = [{ id: uuidv4(), date: '11/12/2022', text: commentText }];
           return { ...item, comments: newComments };
         } else {
           const oldComments = [...item.comments];
           return {
             ...item,
-            comments: [...oldComments, { id: rand(), date: '11/12/2022', text: commentText }],
+            comments: [...oldComments, { id: uuidv4(), date: '11/12/2022', text: commentText }],
           };
         }
       } else {
@@ -166,15 +180,18 @@ const App = () => {
     localStorage.setItem('cards', JSON.stringify(newCards));
   };
 
-  const getColumnCards = (columnId: number) => {
-    const cardsIds = [...columns[columnId].cards];
-    const columnCards: CardsType = [];
-    cards.forEach((item) => {
-      if (cardsIds.includes(item.id)) {
-        columnCards.push(item);
-      }
-    });
-    return columnCards;
+  const getColumnCards = (columnId: string) => {
+    const column = columns.find((item) => item.id === columnId);
+    if (column) {
+      const cardsIds = column.cards;
+      const columnCards: CardsType = [];
+      cards.forEach((item) => {
+        if (cardsIds.includes(item.id)) {
+          columnCards.push(item);
+        }
+      });
+      return columnCards;
+    } else return [];
   };
 
   const cardsActions = {
@@ -222,10 +239,10 @@ const App = () => {
     } else {
       setCards([
         {
-          id: 0,
+          id: 'asdsadsad',
           title: 'first',
           description: 'some',
-          comments: [{ id: 0, date: '11/12/2002', text: 'some comment' }],
+          comments: [{ id: 'asdsada', date: '11/12/2002', text: 'some comment' }],
         },
       ]);
     }

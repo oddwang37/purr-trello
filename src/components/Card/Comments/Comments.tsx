@@ -2,8 +2,12 @@ import React, { FC, useState } from 'react';
 import styled from 'styled-components';
 
 import { CommentsSvg, AvatarSvg } from 'components/svg';
-import { SaveButton, CancelButton, ButtonsWrapper } from 'components/Card/Description/Description';
-import { Comment } from './Comment';
+import {
+  SaveButton,
+  CancelButton,
+  ButtonsWrapper,
+} from 'components/Card/components/Description/Description';
+import { Comment } from './components/Comment';
 
 const Comments: FC<CommentsProps> = ({ comments, addComment }) => {
   const [isEditable, setIsEditable] = useState<boolean>(false);
@@ -64,7 +68,7 @@ const Comments: FC<CommentsProps> = ({ comments, addComment }) => {
 export default Comments;
 
 type CommentsProps = {
-  comments?: { text: string; date: string; id: number }[];
+  comments?: { text: string; date: string; id: string }[];
   addComment: (commentText: string) => void;
 };
 

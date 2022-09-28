@@ -1,15 +1,15 @@
-export type Comment = { id: number; date: string; text: string };
+export type Comment = { id: string; date: string; text: string };
 
 export type Comments = Comment[];
 
-export type CardType = { id: number; title: string; description: string; comments: Comments };
+export type CardType = { id: string; title: string; description: string; comments: Comments };
 
 export type CardsType = CardType[];
 
-type id = number;
+type id = string;
 
 export type ColumnType = {
-  id: number;
+  id: string;
   heading: string;
   cards: id[];
 };

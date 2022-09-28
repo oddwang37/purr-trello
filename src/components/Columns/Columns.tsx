@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import styled from 'styled-components';
 
 import { ColumnType, ColumnsType, CardsType } from 'types/columns';
+import { CardsActions } from 'types/stateActions';
 import Column from './Column/Column';
 
 const Columns: FC<ColumnsProps> = ({ columns, cards, cardsActions }) => {
@@ -30,14 +31,7 @@ export default Columns;
 type ColumnsProps = {
   columns: ColumnsType;
   cards: CardsType;
-  cardsActions: {
-    addCard: (columnId: number, title: string) => void;
-    deleteCard: (columnId: number, cardId: number) => void;
-    editCardTitle: (cardId: number, newTitle: string) => void;
-    changePopupCardId: (cardId: number) => void;
-    getColumnCards: (columnId: number) => CardsType;
-    editColumnHeading: (columnId: number, newHeading: string) => void;
-  };
+  cardsActions: CardsActions;
 };
 
 const Root = styled.div`
