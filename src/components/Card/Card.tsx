@@ -13,6 +13,7 @@ const Card: FC<CardProps> = ({ username, cardInfo, cardPopupActions, isOpened })
     deleteCard,
     editCardTitle,
     editDescription,
+    deleteDescription,
     addComment,
     editCommentText,
     deleteComment,
@@ -69,6 +70,7 @@ const Card: FC<CardProps> = ({ username, cardInfo, cardPopupActions, isOpened })
               description={cardInfo.description}
               editDescription={editDescription}
               updatePopupCard={() => getPopupCard(cardInfo.id)}
+              deleteDescription={deleteDescription}
             />
             <Comments
               cardId={cardInfo.id}

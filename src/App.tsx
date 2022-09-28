@@ -164,6 +164,17 @@ const App = () => {
     storage.setItem(cardsKey, newCards);
   };
 
+  const deleteDescription = () => {
+    const cardId = popupCardId;
+    const newCards = cards.map((item) => {
+      if (item.id === cardId) {
+        return { ...item, description: '' };
+      } else return item;
+    });
+    setCards(newCards);
+    storage.setItem(cardsKey, newCards);
+  };
+
   const addComment = (commentText: string) => {
     const cardId = popupCardId;
     const oldCards = [...cards];
@@ -239,10 +250,12 @@ const App = () => {
     setCards(newCards);
     storage.setItem(cardsKey, newCards);
   };
+
   const cardPopupActions = {
     getPopupCard,
     deleteCard,
     editDescription,
+    deleteDescription,
     addComment,
     editCommentText,
     deleteComment,

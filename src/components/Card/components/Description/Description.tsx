@@ -7,6 +7,7 @@ const Description: FC<DescriptionProps> = ({
   description = '',
   editDescription,
   updatePopupCard,
+  deleteDescription,
 }) => {
   const [isEditable, setIsEditable] = useState<boolean>(false);
 
@@ -66,6 +67,7 @@ const Description: FC<DescriptionProps> = ({
         <DescriptionSvg />
         <Title>Description</Title>
         <Edit onClick={enableEdit}>Edit</Edit>
+        <Delete onClick={deleteDescription}>Delete</Delete>
       </FlexWrapper>
       <DescriptionArea />
     </>
@@ -78,6 +80,7 @@ type DescriptionProps = {
   description: string;
   editDescription: (newDescr: string) => void;
   updatePopupCard: () => void;
+  deleteDescription: () => void;
 };
 
 const FlexWrapper = styled.div`
@@ -96,6 +99,7 @@ const Edit = styled.div`
     text-decoration: underline;
   }
 `;
+const Delete = styled(Edit)``;
 const DescriptionText = styled.div`
   font-size: 14px;
   padding: 7px 15px;
