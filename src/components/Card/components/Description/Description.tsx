@@ -56,8 +56,8 @@ const Description: FC<DescriptionProps> = ({
         <DescriptionSvg />
         <Title>Description</Title>
         <Edit onClick={enableEdit}>Edit</Edit>
-        <DescriptionArea />
       </FlexWrapper>
+      <DescriptionArea />
     </>
   );
 };
