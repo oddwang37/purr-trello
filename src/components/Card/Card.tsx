@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import { Overlay, CloseButton } from 'components';
 import { Description, Comments } from './components';
-import { CardSvg } from 'components/svg';
+import { CardSvg, BinSvg } from 'components/svg';
 import { CardType } from 'types/columns';
 import { CardPopupActions } from 'types/stateActions';
 
@@ -78,7 +78,9 @@ const Card: FC<CardProps> = ({ username, columnTitle, cardInfo, cardPopupActions
               deleteComment={deleteComment}
             />
             <CloseButton closeModal={closeCard} />
-            <DeleteCard onClick={onClickDelete}>Delete card</DeleteCard>
+            <DeleteButton onClick={onClickDelete}>
+              <BinSvg />
+            </DeleteButton>
           </Root>
         </Overlay>
       ) : (
@@ -128,21 +130,19 @@ const Column = styled.div`
 const ColumnTitle = styled.span`
   text-decoration: underline;
 `;
-const DeleteCard = styled.div`
+const DeleteButton = styled.div`
   font-size: 14px;
   position: absolute;
   right: 10px;
-  top: 30%;
-  color: #ff1a4c;
+  top: 45px;
   font-weight: 600;
   display: flex;
   justify-content: center;
   height: 30px;
   padding: 5px 0;
   border-radius: 5px;
-  background-color: rgba(0, 0, 0, 0);
   cursor: pointer;
   &:hover {
-    text-decoration: underline;
+    transform: scale(1.3);
   }
 `;
