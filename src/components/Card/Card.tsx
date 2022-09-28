@@ -7,9 +7,8 @@ import { CardSvg } from 'components/svg';
 import { CardType } from 'types/columns';
 import { CardPopupActions } from 'types/stateActions';
 
-const Card: FC<CardProps> = ({ username, cardInfo, cardPopupActions, isOpened }) => {
+const Card: FC<CardProps> = ({ username, columnTitle, cardInfo, cardPopupActions, isOpened }) => {
   const {
-    getPopupCard,
     deleteCard,
     editCardTitle,
     editDescription,
@@ -62,14 +61,13 @@ const Card: FC<CardProps> = ({ username, cardInfo, cardPopupActions, isOpened })
               />
             </FlexWrapper>
             <Column>
-              columnTitle In <ColumnTitle>{cardInfo?.title}</ColumnTitle> column
+              In <ColumnTitle>{columnTitle}</ColumnTitle> column
               <br />
               by {username}
             </Column>
             <Description
               description={cardInfo.description}
               editDescription={editDescription}
-              updatePopupCard={() => getPopupCard(cardInfo.id)}
               deleteDescription={deleteDescription}
             />
             <Comments
@@ -95,6 +93,7 @@ export default Card;
 type CardProps = {
   username: string;
   cardInfo: CardType;
+  columnTitle: string;
   cardPopupActions: CardPopupActions;
   isOpened: boolean;
 };

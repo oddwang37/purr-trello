@@ -295,6 +295,14 @@ const App = () => {
     }
   };
 
+  const getColumnTitleForPopup = () => {
+    const cardId = popupCardId;
+    const column = columns.find((column) => column.cards.includes(cardId));
+    if (column) {
+      return column.heading;
+    } else return '';
+  };
+
   useEffect(() => {
     getUsername();
     getStorageColumns();
@@ -313,6 +321,7 @@ const App = () => {
       <Card
         username={username}
         cardInfo={getPopupCard(popupCardId)}
+        columnTitle={getColumnTitleForPopup()}
         cardPopupActions={cardPopupActions}
         isOpened={isCardOpened}
       />

@@ -6,7 +6,6 @@ import { DescriptionSvg } from 'components/svg';
 const Description: FC<DescriptionProps> = ({
   description = '',
   editDescription,
-  updatePopupCard,
   deleteDescription,
 }) => {
   const [isEditable, setIsEditable] = useState<boolean>(false);
@@ -25,7 +24,6 @@ const Description: FC<DescriptionProps> = ({
 
   const saveDescription = () => {
     editDescription(textareaValue);
-    updatePopupCard();
     setTextareaValue('');
     disableEdit();
   };
@@ -79,7 +77,6 @@ export default Description;
 type DescriptionProps = {
   description: string;
   editDescription: (newDescr: string) => void;
-  updatePopupCard: () => void;
   deleteDescription: () => void;
 };
 
