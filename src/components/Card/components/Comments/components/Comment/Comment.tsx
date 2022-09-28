@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import { AvatarSvg } from 'components/svg';
 
-const Comment: FC<CommentProps> = ({ id, cardId, text, date, editCommentText }) => {
+const Comment: FC<CommentProps> = ({ id, cardId, text, date, editCommentText, deleteComment }) => {
   const [inputValue, setInputValue] = useState<string>('');
   const [inputIsReadOnly, setInputIsReadOnly] = useState<boolean>(true);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -21,6 +21,10 @@ const Comment: FC<CommentProps> = ({ id, cardId, text, date, editCommentText }) 
       setInputIsReadOnly(false);
       inputRef.current.focus();
     }
+  };
+
+  const onClickDelete = (e: React.MouseEvent<HTMlElement>) => {
+    deleteComment(cardId, id);
   };
 
   const onBlurSave = () => {
@@ -47,7 +51,7 @@ const Comment: FC<CommentProps> = ({ id, cardId, text, date, editCommentText }) 
           <Username>Username</Username>
           <Date>{date}</Date>
           <EditBtn onClick={onClickEdit}>Edit</EditBtn>
-          <DeleteBtn>Delete</DeleteBtn>
+          <DeleteBtn onClick={onClickDelete}>Delete</DeleteBtn>
         </FlexWrapper>
         <TextInput
           value={inputValue}
@@ -71,6 +75,7 @@ type CommentProps = {
   text: string;
   date: string;
   editCommentText: (cardId: string, commentId: string, newTitle: string) => void;
+  deleteComment: (cardId: string, commentId: string) => void;
 };
 const Root = styled.div`
   display: flex;

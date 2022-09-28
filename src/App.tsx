@@ -227,12 +227,25 @@ const App = () => {
     storage.setItem(cardsKey, newCards);
   };
 
+  const deleteComment = (cardId: string, commentId: string) => {
+    const newCards = cards.map((card) => {
+      if (card.id === cardId) {
+        const newComments = card.comments.filter((comment) => comment.id !== commentId);
+        return { ...card, comments: newComments };
+      } else {
+        return card;
+      }
+    });
+    setCards(newCards);
+    storage.setItem(cardsKey, newCards);
+  };
   const cardPopupActions = {
     getPopupCard,
     deleteCard,
     editDescription,
     addComment,
     editCommentText,
+    deleteComment,
     closeCard,
     editCardTitle,
   };

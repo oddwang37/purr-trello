@@ -9,7 +9,13 @@ import {
 } from 'components/Card/components/Description/Description';
 import { Comment } from './components';
 
-const Comments: FC<CommentsProps> = ({ cardId, comments, addComment, editCommentText }) => {
+const Comments: FC<CommentsProps> = ({
+  cardId,
+  comments,
+  addComment,
+  editCommentText,
+  deleteComment,
+}) => {
   const [isEditable, setIsEditable] = useState<boolean>(false);
 
   const enableEdit = () => setIsEditable(true);
@@ -61,6 +67,7 @@ const Comments: FC<CommentsProps> = ({ cardId, comments, addComment, editComment
               text={item.text}
               date={item.date}
               editCommentText={editCommentText}
+              deleteComment={deleteComment}
               key={item.id}
             />
           ))}
@@ -79,6 +86,7 @@ type CommentsProps = {
   comments?: { text: string; date: string; id: string }[];
   addComment: (commentText: string) => void;
   editCommentText: (cardId: string, commentId: string, newText: string) => void;
+  deleteComment: (cardId: string, commentId: string) => void;
 };
 
 const FlexWrapper = styled.div`

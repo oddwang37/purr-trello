@@ -16,5 +16,6 @@ export type CardPopupActions = {
   editDescription: (newDescription: string) => void;
   addComment: (commentText: string) => void;
   editCommentText: (cardId: string, commentId: string, newCommentText: string) => void;
+  deleteComment: (cardId: string, commentId: string) => void;
   closeCard: () => void;
 };

@@ -15,6 +15,7 @@ const Card: FC<CardProps> = ({ username, cardInfo, cardPopupActions, isOpened })
     editDescription,
     addComment,
     editCommentText,
+    deleteComment,
     closeCard,
   } = cardPopupActions;
 
@@ -35,12 +36,6 @@ const Card: FC<CardProps> = ({ username, cardInfo, cardPopupActions, isOpened })
   useEffect(() => {
     cardInfo && setInputVal(cardInfo.title);
   }, [cardInfo]);
-
-  const editCardCommentText = (cardId: string) => {
-    return (commentId: string, newTitle: string) => {
-      editCommentText(cardId, commentId, newTitle);
-    };
-  };
 
   return (
     <>
@@ -66,6 +61,7 @@ const Card: FC<CardProps> = ({ username, cardInfo, cardPopupActions, isOpened })
               comments={cardInfo.comments}
               addComment={addComment}
               editCommentText={editCommentText}
+              deleteComment={deleteComment}
             />
             <CloseButton closeModal={closeCard} />
             <DeleteCard onClick={onClickDelete}>Delete card</DeleteCard>
