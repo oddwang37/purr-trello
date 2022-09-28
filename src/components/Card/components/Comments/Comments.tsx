@@ -9,7 +9,7 @@ import {
 } from 'components/Card/components/Description/Description';
 import { Comment } from './components';
 
-const Comments: FC<CommentsProps> = ({ comments, addComment }) => {
+const Comments: FC<CommentsProps> = ({ cardId, comments, addComment, editCommentText }) => {
   const [isEditable, setIsEditable] = useState<boolean>(false);
 
   const enableEdit = () => setIsEditable(true);
@@ -54,8 +54,15 @@ const Comments: FC<CommentsProps> = ({ comments, addComment }) => {
       </InputWrapper>
       {comments ? (
         <CommentsSection>
-          {comments.reverse().map((item) => (
-            <Comment text={item.text} date={item.date} key={item.id} />
+          {comments.map((item) => (
+            <Comment
+              id={item.id}
+              cardId={cardId}
+              text={item.text}
+              date={item.date}
+              editCommentText={editCommentText}
+              key={item.id}
+            />
           ))}
         </CommentsSection>
       ) : (
@@ -68,8 +75,10 @@ const Comments: FC<CommentsProps> = ({ comments, addComment }) => {
 export default Comments;
 
 type CommentsProps = {
+  cardId: string;
   comments?: { text: string; date: string; id: string }[];
   addComment: (commentText: string) => void;
+  editCommentText: (cardId: string, commentId: string, newText: string) => void;
 };
 
 const FlexWrapper = styled.div`
@@ -110,7 +119,7 @@ const Field = styled.input`
   }
 `;
 const CommentsSection = styled.div`
+  height: 30%;
   margin-top: 15px;
-  height: 50%;
   overflow-y: scroll;
 `;

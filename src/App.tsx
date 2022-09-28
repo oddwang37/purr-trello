@@ -210,11 +210,29 @@ const App = () => {
     editColumnHeading,
   };
 
+  const editCommentText = (cardId: string, commentId: string, newCommentText: string) => {
+    const newCards = cards.map((card) => {
+      if (card.id === cardId) {
+        const newComments = card.comments.map((comment) => {
+          if (comment.id === commentId) {
+            return { ...comment, text: newCommentText };
+          } else return comment;
+        });
+        return { ...card, comments: newComments };
+      } else {
+        return card;
+      }
+    });
+    setCards(newCards);
+    storage.setItem(cardsKey, newCards);
+  };
+
   const cardPopupActions = {
     getPopupCard,
     deleteCard,
     editDescription,
     addComment,
+    editCommentText,
     closeCard,
     editCardTitle,
   };

@@ -8,8 +8,15 @@ import { CardType } from 'types/columns';
 import { CardPopupActions } from 'types/stateActions';
 
 const Card: FC<CardProps> = ({ username, cardInfo, cardPopupActions, isOpened }) => {
-  const { getPopupCard, deleteCard, editCardTitle, editDescription, addComment, closeCard } =
-    cardPopupActions;
+  const {
+    getPopupCard,
+    deleteCard,
+    editCardTitle,
+    editDescription,
+    addComment,
+    editCommentText,
+    closeCard,
+  } = cardPopupActions;
 
   const onClickDelete = () => {
     deleteCard();
@@ -28,6 +35,12 @@ const Card: FC<CardProps> = ({ username, cardInfo, cardPopupActions, isOpened })
   useEffect(() => {
     cardInfo && setInputVal(cardInfo.title);
   }, [cardInfo]);
+
+  const editCardCommentText = (cardId: string) => {
+    return (commentId: string, newTitle: string) => {
+      editCommentText(cardId, commentId, newTitle);
+    };
+  };
 
   return (
     <>
@@ -48,7 +61,12 @@ const Card: FC<CardProps> = ({ username, cardInfo, cardPopupActions, isOpened })
               editDescription={editDescription}
               updatePopupCard={() => getPopupCard(cardInfo.id)}
             />
-            <Comments comments={cardInfo.comments} addComment={addComment} />
+            <Comments
+              cardId={cardInfo.id}
+              comments={cardInfo.comments}
+              addComment={addComment}
+              editCommentText={editCommentText}
+            />
             <CloseButton closeModal={closeCard} />
             <DeleteCard onClick={onClickDelete}>Delete card</DeleteCard>
           </Root>

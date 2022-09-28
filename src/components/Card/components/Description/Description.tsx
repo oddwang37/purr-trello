@@ -31,25 +31,24 @@ const Description: FC<DescriptionProps> = ({
 
   const DescriptionArea = () => {
     if (isEditable) {
-      if (description) {
-        return <DescriptionText>{description}</DescriptionText>;
-      } else {
-        return (
-          <DescriptionEdit>
-            <DescriptionTextArea autoFocus onChange={handleTextareaChange} value={textareaValue} />
-            <ButtonsWrapper>
-              <SaveButton onClick={onClickSave}>Save</SaveButton>
-              <CancelButton onClick={disableEdit}>Cancel</CancelButton>
-            </ButtonsWrapper>
-          </DescriptionEdit>
-        );
-      }
-    } else {
       return (
-        <DescriptionButton onClick={enableEdit}>Add more detailed description...</DescriptionButton>
+        <DescriptionEdit>
+          <DescriptionTextArea autoFocus onChange={handleTextareaChange} value={textareaValue} />
+          <ButtonsWrapper>
+            <SaveButton onClick={onClickSave}>Save</SaveButton>
+            <CancelButton onClick={disableEdit}>Cancel</CancelButton>
+          </ButtonsWrapper>
+        </DescriptionEdit>
       );
     }
+    if (description) {
+      return <DescriptionText>{description}</DescriptionText>;
+    }
+    return (
+      <DescriptionButton onClick={enableEdit}>Add more detailed description...</DescriptionButton>
+    );
   };
+
   return (
     <>
       <FlexWrapper>

@@ -1,9 +1,44 @@
-import React, { FC } from 'react';
+import React, { FC, useState, useEffect, useRef, KeyboardEvent } from 'react';
 import styled from 'styled-components';
 
 import { AvatarSvg } from 'components/svg';
 
-const Comment: FC<CommentProps> = ({ text, date }) => {
+const Comment: FC<CommentProps> = ({ id, cardId, text, date, editCommentText }) => {
+  const [inputValue, setInputValue] = useState<string>('');
+  const [inputIsReadOnly, setInputIsReadOnly] = useState<boolean>(true);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+  };
+
+  useEffect(() => {
+    setInputValue(text);
+  }, [text]);
+
+  const onClickEdit = (e: React.MouseEvent<HTMLElement>) => {
+    if (inputRef.current) {
+      setInputIsReadOnly(false);
+      inputRef.current.focus();
+    }
+  };
+
+  const onBlurSave = () => {
+    editCommentText(cardId, id, inputValue);
+    setInputIsReadOnly(true);
+  };
+  const onEnterPress = (e: KeyboardEvent<HTMLInputElement>): any => {
+    if (e.key === 'Enter' && inputRef.current) {
+      /// e.target.blur(); ///
+      inputRef.current.blur();
+    }
+  };
+  const forbidFocusOnClick = (e: React.MouseEvent<HTMLElement>) => {
+    if (inputRef.current) {
+      inputRef.current.blur();
+    }
+  };
+
   return (
     <Root>
       <AvatarSvg />
@@ -11,10 +46,18 @@ const Comment: FC<CommentProps> = ({ text, date }) => {
         <FlexWrapper>
           <Username>Username</Username>
           <Date>{date}</Date>
-          <EditBtn>Edit</EditBtn>
+          <EditBtn onClick={onClickEdit}>Edit</EditBtn>
           <DeleteBtn>Delete</DeleteBtn>
         </FlexWrapper>
-        <Text>{text}</Text>
+        <TextInput
+          value={inputValue}
+          onChange={onChange}
+          onBlur={onBlurSave}
+          ref={inputRef}
+          readOnly={inputIsReadOnly}
+          onClick={forbidFocusOnClick}
+          onKeyDown={onEnterPress}
+        />
       </div>
     </Root>
   );
@@ -23,8 +66,11 @@ const Comment: FC<CommentProps> = ({ text, date }) => {
 export default Comment;
 
 type CommentProps = {
+  id: string;
+  cardId: string;
   text: string;
   date: string;
+  editCommentText: (cardId: string, commentId: string, newTitle: string) => void;
 };
 const Root = styled.div`
   display: flex;
@@ -42,7 +88,7 @@ const Username = styled.div`
   font-weight: 700;
   font-size: 14px;
 `;
-const Text = styled.div`
+const TextInput = styled.input`
   width: 450px;
   padding: 5px 15px;
   border: 1px solid rgba(0, 0, 0, 0.2);
