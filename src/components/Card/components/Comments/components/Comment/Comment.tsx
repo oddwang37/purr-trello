@@ -23,7 +23,7 @@ const Comment: FC<CommentProps> = ({ id, cardId, text, date, editCommentText, de
     }
   };
 
-  const onClickDelete = (e: React.MouseEvent<HTMlElement>) => {
+  const onClickDelete = (e: React.MouseEvent<HTMLElement>) => {
     deleteComment(cardId, id);
   };
 

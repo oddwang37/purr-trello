@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState, useRef, KeyboardEvent } from 'react';
 import styled from 'styled-components';
 
 import { CardsType } from 'types/columns';
@@ -10,6 +10,7 @@ const Column: FC<ColumnProps> = ({ id, heading, cardsIds, cardsActions }) => {
     cardsActions;
 
   const [cards, setCards] = useState<CardsType>([]);
+  const headingRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const columnCards = getColumnCards(id);
@@ -26,7 +27,8 @@ const Column: FC<ColumnProps> = ({ id, heading, cardsIds, cardsActions }) => {
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setAddingInputVal(e.target.value);
   };
-  const onCardCreate = () => {
+
+  const createCard = () => {
     addCard(id, addingInputVal);
     setAddingInputVal('');
     setIsEditable(false);
@@ -46,9 +48,27 @@ const Column: FC<ColumnProps> = ({ id, heading, cardsIds, cardsActions }) => {
     setInputHeadingText(heading);
   }, [heading]);
 
+  const onEnterPressHeading = (e: KeyboardEvent<HTMLInputElement>): any => {
+    if (e.key === 'Enter' && headingRef.current) {
+      headingRef.current.blur();
+    }
+  };
+
+  const onEnterPressAddingCard = (e: KeyboardEvent<HTMLTextAreaElement>): any => {
+    if (e.key === 'Enter') {
+      createCard();
+    }
+  };
+
   return (
     <Root>
-      <Header value={inputHeadingText} onChange={onHeadingChange} onBlur={onBlurHeading} />
+      <Header
+        value={inputHeadingText}
+        ref={headingRef}
+        onKeyDown={onEnterPressHeading}
+        onChange={onHeadingChange}
+        onBlur={onBlurHeading}
+      />
       <Content>
         {cards.map((item) => (
           <CardPreview
@@ -63,14 +83,15 @@ const Column: FC<ColumnProps> = ({ id, heading, cardsIds, cardsActions }) => {
         ))}
         {isEditable ? (
           <AddingCardInterface>
-            <AddCardInput
+            <AddCardTextArea
               placeholder="Enter a card name..."
               autoFocus
               onChange={handleChange}
               value={addingInputVal}
+              onKeyDown={onEnterPressAddingCard}
             />
             <ButtonsWrapper>
-              <SaveButton onClick={onCardCreate}>Create</SaveButton>
+              <SaveButton onClick={createCard}>Create</SaveButton>
               <CancelAdding onClick={disableEdit}>
                 <div>&times;</div>
               </CancelAdding>
@@ -140,7 +161,7 @@ const AddCard = styled.div`
   }
 `;
 const AddingCardInterface = styled.div``;
-const AddCardInput = styled.textarea`
+const AddCardTextArea = styled.textarea`
   resize: none;
   width: 100%;
   height: 60px;

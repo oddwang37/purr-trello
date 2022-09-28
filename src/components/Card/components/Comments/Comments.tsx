@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, KeyboardEvent } from 'react';
 import styled from 'styled-components';
 
 import { CommentsSvg, AvatarSvg } from 'components/svg';
@@ -27,10 +27,16 @@ const Comments: FC<CommentsProps> = ({
     setInputValue(e.target.value);
   };
 
-  const onClickSend = () => {
+  const sendComment = () => {
     addComment(inputValue);
     disableEdit();
     setInputValue('');
+  };
+
+  const onEnterPress = (e: KeyboardEvent<HTMLInputElement>): any => {
+    if (e.key === 'Enter') {
+      sendComment();
+    }
   };
 
   return (
@@ -47,10 +53,11 @@ const Comments: FC<CommentsProps> = ({
               placeholder="Write a comment..."
               onChange={handleChange}
               value={inputValue}
+              onKeyDown={onEnterPress}
               autoFocus
             />
             <ButtonsWrapper>
-              <SaveButton onClick={onClickSend}>Send</SaveButton>
+              <SaveButton onClick={sendComment}>Send</SaveButton>
               <CancelButton onClick={disableEdit}>Cancel</CancelButton>
             </ButtonsWrapper>
           </CommentSending>

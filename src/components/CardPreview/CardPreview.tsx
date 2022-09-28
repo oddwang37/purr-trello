@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect, KeyboardEvent } from 'react';
 import styled from 'styled-components';
 
 import { EditSvg } from 'components/svg';
@@ -41,11 +41,23 @@ const CardPreview: FC<CardPreviewProps> = ({
     setTextareaVal(title);
   }, [title]);
 
+  const onEnterPress = (e: KeyboardEvent<HTMLTextAreaElement>): any => {
+    if (e.key === 'Enter') {
+      editCardTitle(cardId, textareaVal);
+      disableEdit();
+    }
+  };
+
   return (
     <>
       {isEditable ? (
         <EditInterface>
-          <EditArea onChange={handleChange} value={textareaVal} autoFocus />
+          <EditArea
+            onChange={handleChange}
+            value={textareaVal}
+            onKeyDown={onEnterPress}
+            autoFocus
+          />
           <SaveButton onClick={onClickSave}>Save</SaveButton>
         </EditInterface>
       ) : (

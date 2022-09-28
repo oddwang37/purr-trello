@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, KeyboardEvent } from 'react';
 import styled from 'styled-components';
 
 import { DescriptionSvg } from 'components/svg';
@@ -22,20 +22,31 @@ const Description: FC<DescriptionProps> = ({
     setTextareaValue(e.target.value);
   };
 
-  const onClickSave = () => {
+  const saveDescription = () => {
     editDescription(textareaValue);
     updatePopupCard();
     setTextareaValue('');
     disableEdit();
   };
 
+  const onEnterPress = (e: KeyboardEvent<HTMLTextAreaElement>): any => {
+    if (e.key === 'Enter') {
+      saveDescription();
+    }
+  };
+
   const DescriptionArea = () => {
     if (isEditable) {
       return (
         <DescriptionEdit>
-          <DescriptionTextArea autoFocus onChange={handleTextareaChange} value={textareaValue} />
+          <DescriptionTextArea
+            autoFocus
+            onKeyDown={onEnterPress}
+            onChange={handleTextareaChange}
+            value={textareaValue}
+          />
           <ButtonsWrapper>
-            <SaveButton onClick={onClickSave}>Save</SaveButton>
+            <SaveButton onClick={saveDescription}>Save</SaveButton>
             <CancelButton onClick={disableEdit}>Cancel</CancelButton>
           </ButtonsWrapper>
         </DescriptionEdit>

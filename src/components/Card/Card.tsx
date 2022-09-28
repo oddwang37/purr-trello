@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState, useRef, KeyboardEvent } from 'react';
 import styled from 'styled-components';
 
 import { Overlay, CloseButton } from 'components';
@@ -26,6 +26,14 @@ const Card: FC<CardProps> = ({ username, cardInfo, cardPopupActions, isOpened })
 
   const [inputVal, setInputVal] = useState<string>('');
 
+  const titleInputRef = useRef<HTMLInputElement>(null);
+
+  const onEnterPress = (e: KeyboardEvent<HTMLInputElement>): any => {
+    if (e.key === 'Enter' && titleInputRef.current) {
+      titleInputRef.current.blur();
+    }
+  };
+
   const onBlur = () => {
     editCardTitle(cardInfo.id, inputVal);
   };
@@ -44,7 +52,13 @@ const Card: FC<CardProps> = ({ username, cardInfo, cardPopupActions, isOpened })
           <Root>
             <FlexWrapper>
               <CardSvg />
-              <Title value={inputVal} onChange={onChange} onBlur={onBlur} />
+              <Title
+                value={inputVal}
+                onChange={onChange}
+                onBlur={onBlur}
+                ref={titleInputRef}
+                onKeyDown={onEnterPress}
+              />
             </FlexWrapper>
             <Column>
               columnTitle In <ColumnTitle>{cardInfo?.title}</ColumnTitle> column
