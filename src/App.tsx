@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { ColumnsType, CardsType } from 'types/columns';
 import { Columns, Header, LoginModal, Card } from 'components';
+import formatDate from 'utils/formatDate';
 import StorageService, { StorageKeys } from 'services/StorageService';
 
 const App = () => {
@@ -73,10 +74,6 @@ const App = () => {
 
   const addCard = (columnId: string, title: string) => {
     const id = uuidv4();
-    /*     const newColumns = columns.map((item) => ({
-      ...item,
-      cards: [...item.cards],
-    })); */
     const newColumns = columns.map((item) => {
       if (item.id === columnId) {
         const newItem = item;
@@ -178,16 +175,17 @@ const App = () => {
   const addComment = (commentText: string) => {
     const cardId = popupCardId;
     const oldCards = [...cards];
+    const date = formatDate(new Date());
     const newCards = oldCards.map((item) => {
       if (item.id === cardId) {
         if (item.comments.length === 0) {
-          const newComments = [{ id: uuidv4(), date: '11/12/2022', text: commentText }];
+          const newComments = [{ id: uuidv4(), date, text: commentText }];
           return { ...item, comments: newComments };
         } else {
           const oldComments = [...item.comments];
           return {
             ...item,
-            comments: [...oldComments, { id: uuidv4(), date: '11/12/2022', text: commentText }],
+            comments: [...oldComments, { id: uuidv4(), date, text: commentText }],
           };
         }
       } else {
