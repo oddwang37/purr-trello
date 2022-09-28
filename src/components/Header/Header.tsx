@@ -5,7 +5,7 @@ const Header: FC<HeaderProps> = ({ username }) => {
   return (
     <Root>
       <Logo>logoTrello</Logo>
-      <Username>{username}</Username>
+      {username ? <Username>{username}</Username> : null}
     </Root>
   );
 };

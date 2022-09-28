@@ -45,7 +45,7 @@ const App = () => {
   const [cards, setCards] = useState<CardsType>([]);
   // ---------- Popups states -------------------
 
-  const [isModalOpened, setModalOpened] = useState<boolean>(true);
+  const [isModalOpened, setModalOpened] = useState<boolean>(false);
 
   const closeModal = () => {
     setModalOpened(false);
@@ -265,7 +265,8 @@ const App = () => {
     const storageUsername = storage.getItem(usernameKey);
     if (storageUsername && typeof storageUsername === 'string') {
       setUsername(storageUsername);
-      closeModal();
+    } else {
+      setModalOpened(true);
     }
   };
   const getStorageColumns = () => {
