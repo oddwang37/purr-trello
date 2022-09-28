@@ -15,22 +15,22 @@ const App = () => {
 
   const initialColumns = [
     {
-      id: 'asdasdsad',
+      id: uuidv4(),
       heading: 'TODO',
-      cards: ['asdsadsad'],
+      cards: [],
     },
     {
-      id: 'sadasdas',
+      id: uuidv4(),
       heading: 'In Progress',
       cards: [],
     },
     {
-      id: 'asdasdasd',
+      id: uuidv4(),
       heading: 'Testing',
       cards: [],
     },
     {
-      id: 'asdsadsad',
+      id: uuidv4(),
       heading: 'Done',
       cards: [],
     },
@@ -42,14 +42,7 @@ const App = () => {
     storage.setItem(usernameKey, newName);
   };
   const [columns, setColumns] = useState<ColumnsType>(initialColumns);
-  const [cards, setCards] = useState<CardsType>([
-    {
-      id: 'asdsadsad',
-      title: 'first',
-      description: 'some',
-      comments: [{ id: 'asdsadsad', date: '11/12/2002', text: 'some comment' }],
-    },
-  ]);
+  const [cards, setCards] = useState<CardsType>([]);
   // ---------- Popups states -------------------
 
   const [isModalOpened, setModalOpened] = useState<boolean>(true);
@@ -64,7 +57,7 @@ const App = () => {
   const closeCard = () => setCardOpened(false);
 
   // first is columnd id, second is card id
-  const [popupCardId, setPopupCardId] = useState<string>('asdsadsad');
+  const [popupCardId, setPopupCardId] = useState<string | null>(null);
 
   const changePopupCardId = (cardId: string) => {
     setPopupCardId(cardId);
@@ -102,7 +95,6 @@ const App = () => {
   };
 
   const editColumnHeading = (columnId: string, newHeading: string) => {
-    // const newColumns = cloneColumns(columns);
     const newColumns = columns.map((item) => {
       if (item.id === columnId) {
         const newColumn = item;
@@ -123,28 +115,36 @@ const App = () => {
     }
   };
   // get info about current popup card
-  const getPopupCard = (cardId: string) => {
-    const card = cards.filter((item) => item.id === cardId)[0];
-    return card;
+  const getPopupCard = (cardId: string | null) => {
+    if (cardId) {
+      const card = cards.find((item) => item.id === cardId);
+      if (card) {
+        return card;
+      }
+    }
+
+    return null;
   };
 
   const deleteCard = () => {
-    const cardId = popupCardId;
-    const columnId = findColumnOfCard(cardId);
-    if (columnId) {
-      const newColumns = columns.map((column) => {
-        if (column.id === columnId) {
-          return { ...column, cards: column.cards.filter((card) => card !== cardId) };
-        } else {
-          return column;
-        }
-      });
-      setColumns(newColumns);
-      const newCards = cards.filter((item) => item.id !== cardId);
-      setCards(newCards);
-      setPopupCardId('asdsadsad');
-      storage.setItem(cardsKey, newCards);
-      storage.setItem(columnsKey, newColumns);
+    if (popupCardId) {
+      const cardId = popupCardId;
+      const columnId = findColumnOfCard(cardId);
+      if (columnId) {
+        const newColumns = columns.map((column) => {
+          if (column.id === columnId) {
+            return { ...column, cards: column.cards.filter((card) => card !== cardId) };
+          } else {
+            return column;
+          }
+        });
+        setColumns(newColumns);
+        const newCards = cards.filter((item) => item.id !== cardId);
+        setCards(newCards);
+        setPopupCardId(null);
+        storage.setItem(cardsKey, newCards);
+        storage.setItem(columnsKey, newColumns);
+      }
     }
   };
 
@@ -282,23 +282,18 @@ const App = () => {
     if (storageCards) {
       setCards(JSON.parse(storageCards));
     } else {
-      setCards([
-        {
-          id: 'asdsadsad',
-          title: 'first',
-          description: 'some',
-          comments: [{ id: 'asdsada', date: '11/12/2002', text: 'some comment' }],
-        },
-      ]);
+      setCards([]);
     }
   };
 
   const getColumnTitleForPopup = () => {
-    const cardId = popupCardId;
-    const column = columns.find((column) => column.cards.includes(cardId));
-    if (column) {
-      return column.heading;
-    } else return '';
+    if (popupCardId) {
+      const cardId = popupCardId;
+      const column = columns.find((column) => column.cards.includes(cardId));
+      if (column) {
+        return column.heading;
+      } else return '';
+    } else return null;
   };
 
   useEffect(() => {

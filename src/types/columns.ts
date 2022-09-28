@@ -15,10 +15,3 @@ export type ColumnType = {
 };
 
 export type ColumnsType = ColumnType[];
-
-export type PopupCardType = {
-  cardInfo: CardType;
-  columnId: number;
-  cardId: number;
-  columnTitle: string;
-};

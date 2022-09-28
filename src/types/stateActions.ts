@@ -10,7 +10,7 @@ export type CardsActions = {
 };
 
 export type CardPopupActions = {
-  getPopupCard: (cardId: string) => CardType;
+  getPopupCard: (cardId: string) => CardType | null;
   deleteCard: () => void;
   editCardTitle: (cardId: string, newTitle: string) => void;
   editDescription: (newDescription: string) => void;

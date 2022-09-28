@@ -35,7 +35,9 @@ const Card: FC<CardProps> = ({ username, columnTitle, cardInfo, cardPopupActions
   };
 
   const onBlur = () => {
-    editCardTitle(cardInfo.id, inputVal);
+    if (cardInfo) {
+      editCardTitle(cardInfo.id, inputVal);
+    }
   };
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,7 +49,7 @@ const Card: FC<CardProps> = ({ username, columnTitle, cardInfo, cardPopupActions
 
   return (
     <>
-      {cardInfo ? (
+      {cardInfo && (
         <Overlay isOpened={isOpened}>
           <Root>
             <FlexWrapper>
@@ -83,8 +85,6 @@ const Card: FC<CardProps> = ({ username, columnTitle, cardInfo, cardPopupActions
             </DeleteButton>
           </Root>
         </Overlay>
-      ) : (
-        <div></div>
       )}
     </>
   );
@@ -94,8 +94,8 @@ export default Card;
 
 type CardProps = {
   username: string;
-  cardInfo: CardType;
-  columnTitle: string;
+  cardInfo: CardType | null;
+  columnTitle: string | null;
   cardPopupActions: CardPopupActions;
   isOpened: boolean;
 };
