@@ -29,26 +29,35 @@ const Description: FC<DescriptionProps> = ({
     disableEdit();
   };
 
+  const DescriptionArea = () => {
+    if (isEditable) {
+      if (description) {
+        return <DescriptionText>{description}</DescriptionText>;
+      } else {
+        return (
+          <DescriptionEdit>
+            <DescriptionTextArea autoFocus onChange={handleTextareaChange} value={textareaValue} />
+            <ButtonsWrapper>
+              <SaveButton onClick={onClickSave}>Save</SaveButton>
+              <CancelButton onClick={disableEdit}>Cancel</CancelButton>
+            </ButtonsWrapper>
+          </DescriptionEdit>
+        );
+      }
+    } else {
+      return (
+        <DescriptionButton onClick={enableEdit}>Add more detailed description...</DescriptionButton>
+      );
+    }
+  };
   return (
     <>
       <FlexWrapper>
         <DescriptionSvg />
         <Title>Description</Title>
         <Edit onClick={enableEdit}>Edit</Edit>
+        <DescriptionArea />
       </FlexWrapper>
-      {isEditable ? (
-        <DescriptionEdit>
-          <DescriptionArea autoFocus onChange={handleTextareaChange} value={textareaValue} />
-          <ButtonsWrapper>
-            <SaveButton onClick={onClickSave}>Save</SaveButton>
-            <CancelButton onClick={disableEdit}>Cancel</CancelButton>
-          </ButtonsWrapper>
-        </DescriptionEdit>
-      ) : description ? (
-        <DescriptionText>{description}</DescriptionText>
-      ) : (
-        <DescriptionButton onClick={enableEdit}>Add more detailed description...</DescriptionButton>
-      )}
     </>
   );
 };
@@ -98,7 +107,7 @@ const DescriptionButton = styled.div`
 const DescriptionEdit = styled.div`
   margin: 10px 0 20px 30px;
 `;
-const DescriptionArea = styled.textarea`
+const DescriptionTextArea = styled.textarea`
   resize: none;
   height: 80px;
   width: 450px;
