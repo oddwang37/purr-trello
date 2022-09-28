@@ -7,7 +7,7 @@ import {
   CancelButton,
   ButtonsWrapper,
 } from 'components/Card/components/Description/Description';
-import { Comment } from './components/Comment';
+import { Comment } from './components';
 
 const Comments: FC<CommentsProps> = ({ comments, addComment }) => {
   const [isEditable, setIsEditable] = useState<boolean>(false);

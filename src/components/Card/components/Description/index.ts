@@ -1,3 +1,1 @@
-import Description from './Description';
-
-export { Description };
+export { default as Description } from './Description';

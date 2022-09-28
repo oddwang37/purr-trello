@@ -1,2 +1,2 @@
 export { default as Comments } from './Comments';
-export { Comment } from './components/Comment';
+export { Comment } from './components';

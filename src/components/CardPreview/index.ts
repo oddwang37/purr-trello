@@ -1,2 +1,1 @@
-import CardPreview from './CardPreview';
-export { CardPreview };
+export { default as CardPreview } from './CardPreview';

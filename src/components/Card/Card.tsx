@@ -2,8 +2,7 @@ import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { Overlay, CloseButton } from 'components';
-import { Description } from './components/Description';
-import { Comments } from './Comments';
+import { Description, Comments } from './components';
 import { CardSvg } from 'components/svg';
 import { CardType } from 'types/columns';
 import { CardPopupActions } from 'types/stateActions';

@@ -1,4 +1,2 @@
-import Button from './Button';
-import { SaveButton } from '../SaveButton';
-
-export { Button, SaveButton };
+export { default as Button } from './Button';
+export { SaveButton } from '../SaveButton';

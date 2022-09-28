@@ -1,4 +1,2 @@
-import Columns from './Columns';
-import { Column } from './Column';
-
-export { Columns, Column};
+export { default as Columns } from './Columns';
+export { Column } from './components';

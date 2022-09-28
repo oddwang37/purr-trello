@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import { ColumnType, ColumnsType, CardsType } from 'types/columns';
 import { CardsActions } from 'types/stateActions';
-import Column from './Column/Column';
+import Column from './components/Column/Column';
 
 const Columns: FC<ColumnsProps> = ({ columns, cards, cardsActions }) => {
   const { getColumnCards } = cardsActions;

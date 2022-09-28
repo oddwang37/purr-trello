@@ -1,5 +1,2 @@
-import Card from './Card';
-import { Description } from './components/Description';
-import { Comments } from './Comments';
-
-export { Card, Description, Comments };
+export { default as Card } from './Card';
+export { Description, Comment, Comments } from './components';
