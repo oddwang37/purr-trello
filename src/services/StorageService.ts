@@ -14,19 +14,12 @@ class StorageService {
     const stringifiedValue = JSON.stringify(data);
     localStorage.setItem(storageKey, stringifiedValue);
   }
-  getItem(storageKey: StorageKeys): CardsType | ColumnsType | Username {
+  getItem(storageKey: StorageKeys) {
     const storageItem = localStorage.getItem(storageKey);
     if (storageItem) {
-      let parsedItem;
-      try {
-        parsedItem = JSON.parse(storageItem);
-      } catch (e) {
-        parsedItem = storageItem;
-      } finally {
-        return parsedItem;
-      }
+      return JSON.parse(storageItem);
     } else {
-      return [];
+      return null;
     }
   }
 }

@@ -13,6 +13,34 @@ const App = () => {
   const columnsKey: StorageKeys = StorageKeys.columns;
   const usernameKey: StorageKeys = StorageKeys.username;
 
+  /// -------------- Username control -------------------- //
+  const [username, setUsername] = useState<string>('');
+
+  const changeUsername = (newName: string) => {
+    setUsername(newName);
+    storage.setItem(usernameKey, newName);
+  };
+  // ---------- Popups states -------------------
+
+  const [isModalOpened, setModalOpened] = useState<boolean>(false);
+
+  const closeModal = () => {
+    setModalOpened(false);
+  };
+
+  const [isCardOpened, setCardOpened] = useState<boolean>(false);
+
+  const openCard = () => setCardOpened(true);
+  const closeCard = () => setCardOpened(false);
+
+  const [popupCardId, setPopupCardId] = useState<string | null>(null);
+
+  const changePopupCardId = (cardId: string) => {
+    setPopupCardId(cardId);
+    openCard();
+  };
+
+  /// ----------- COLUMNS AND CARDS ------------------------------
   const initialColumns = [
     {
       id: uuidv4(),
@@ -35,35 +63,9 @@ const App = () => {
       cards: [],
     },
   ];
-  const [username, setUsername] = useState<string>('');
 
-  const changeUsername = (newName: string) => {
-    setUsername(newName);
-    storage.setItem(usernameKey, newName);
-  };
   const [columns, setColumns] = useState<ColumnsType>(initialColumns);
   const [cards, setCards] = useState<CardsType>([]);
-  // ---------- Popups states -------------------
-
-  const [isModalOpened, setModalOpened] = useState<boolean>(false);
-
-  const closeModal = () => {
-    setModalOpened(false);
-  };
-
-  const [isCardOpened, setCardOpened] = useState<boolean>(false);
-
-  const openCard = () => setCardOpened(true);
-  const closeCard = () => setCardOpened(false);
-
-  // first is columnd id, second is card id
-  const [popupCardId, setPopupCardId] = useState<string | null>(null);
-
-  const changePopupCardId = (cardId: string) => {
-    setPopupCardId(cardId);
-    openCard();
-  };
-  //  --------------------- Actions with columns -----------------
 
   const addCard = (columnId: string, title: string) => {
     const id = uuidv4();
@@ -114,6 +116,17 @@ const App = () => {
       return result.id;
     }
   };
+
+  const getColumnTitleForPopup = () => {
+    if (popupCardId) {
+      const cardId = popupCardId;
+      const column = columns.find((column) => column.cards.includes(cardId));
+      if (column) {
+        return column.heading;
+      } else return '';
+    } else return null;
+  };
+
   // get info about current popup card
   const getPopupCard = (cardId: string | null) => {
     if (cardId) {
@@ -148,7 +161,6 @@ const App = () => {
     }
   };
 
-  //edit description works only with current card info on popup
   const editDescription = (newDescr: string) => {
     const cardId = popupCardId;
     const oldCards = [...cards];
@@ -210,15 +222,6 @@ const App = () => {
     } else return [];
   };
 
-  const cardsActions = {
-    addCard,
-    deleteCard,
-    editCardTitle,
-    changePopupCardId,
-    getColumnCards,
-    editColumnHeading,
-  };
-
   const editCommentText = (cardId: string, commentId: string, newCommentText: string) => {
     const newCards = cards.map((card) => {
       if (card.id === cardId) {
@@ -249,6 +252,15 @@ const App = () => {
     storage.setItem(cardsKey, newCards);
   };
 
+  const cardsActions = {
+    addCard,
+    deleteCard,
+    editCardTitle,
+    changePopupCardId,
+    getColumnCards,
+    editColumnHeading,
+  };
+
   const cardPopupActions = {
     getPopupCard,
     deleteCard,
@@ -270,31 +282,13 @@ const App = () => {
     }
   };
   const getStorageColumns = () => {
-    const storageColumns = localStorage.getItem('columns');
-    if (storageColumns) {
-      setColumns(JSON.parse(storageColumns));
-    } else {
-      setColumns(initialColumns);
-    }
+    const storageColumns = storage.getItem(columnsKey);
+    storageColumns ? setColumns(storageColumns) : setColumns(initialColumns);
   };
 
   const getStorageCards = () => {
-    const storageCards = localStorage.getItem('cards');
-    if (storageCards) {
-      setCards(JSON.parse(storageCards));
-    } else {
-      setCards([]);
-    }
-  };
-
-  const getColumnTitleForPopup = () => {
-    if (popupCardId) {
-      const cardId = popupCardId;
-      const column = columns.find((column) => column.cards.includes(cardId));
-      if (column) {
-        return column.heading;
-      } else return '';
-    } else return null;
+    const storageCards = storage.getItem(cardsKey);
+    storageCards ? setCards(storageCards) : setCards([]);
   };
 
   useEffect(() => {
