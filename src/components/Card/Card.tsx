@@ -28,6 +28,8 @@ const Card: FC<CardProps> = ({ username, columnTitle, cardInfo, cardPopupActions
 
   const titleInputRef = useRef<HTMLInputElement>(null);
 
+  const modalRef = useRef<HTMLDivElement>(null);
+
   const onEnterPress = (e: KeyboardEvent<HTMLInputElement>): any => {
     if (e.key === 'Enter' && titleInputRef.current) {
       titleInputRef.current.blur();
@@ -52,11 +54,23 @@ const Card: FC<CardProps> = ({ username, columnTitle, cardInfo, cardPopupActions
     cardInfo && setHeadingVal(cardInfo.title);
   }, [cardInfo]);
 
+  useEffect(() => {
+    const onKeyDown = (event: any) => {
+      if (event.code === 'Escape') {
+        closeCard();
+      }
+    };
+    document.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.removeEventListener('keydown', onKeyDown);
+    };
+  });
+
   return (
     <>
       {cardInfo && (
-        <Overlay isOpened={isOpened}>
-          <Root>
+        <Overlay isOpened={isOpened} onClick={closeCard}>
+          <Root onClick={(e: React.MouseEvent) => e.stopPropagation()}>
             <FlexWrapper>
               <CardSvg />
               <Title

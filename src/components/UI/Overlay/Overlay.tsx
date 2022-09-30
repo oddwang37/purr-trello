@@ -1,8 +1,12 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
 
-const Overlay: FC<OverlayProps> = ({ children, isOpened }) => {
-  return <Root isOpened={isOpened}>{children}</Root>;
+const Overlay: FC<OverlayProps> = ({ children, isOpened, onClick }) => {
+  return (
+    <Root onClick={onClick} isOpened={isOpened}>
+      {children}
+    </Root>
+  );
 };
 
 export default Overlay;
@@ -10,6 +14,7 @@ export default Overlay;
 type OverlayProps = {
   children: JSX.Element;
   isOpened: boolean;
+  onClick?: () => void;
 };
 
 type RootProps = {
