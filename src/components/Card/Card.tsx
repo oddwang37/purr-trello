@@ -24,7 +24,7 @@ const Card: FC<CardProps> = ({ username, columnTitle, cardInfo, cardPopupActions
     closeCard();
   };
 
-  const [inputVal, setInputVal] = useState<string>('');
+  const [headingVal, setHeadingVal] = useState<string>('');
 
   const titleInputRef = useRef<HTMLInputElement>(null);
 
@@ -36,15 +36,15 @@ const Card: FC<CardProps> = ({ username, columnTitle, cardInfo, cardPopupActions
 
   const onBlur = () => {
     if (cardInfo) {
-      editCardTitle(cardInfo.id, inputVal);
+      editCardTitle(cardInfo.id, headingVal);
     }
   };
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputVal(e.target.value);
+    setHeadingVal(e.target.value);
   };
   useEffect(() => {
-    cardInfo && setInputVal(cardInfo.title);
+    cardInfo && setHeadingVal(cardInfo.title);
   }, [cardInfo]);
 
   return (
@@ -55,7 +55,7 @@ const Card: FC<CardProps> = ({ username, columnTitle, cardInfo, cardPopupActions
             <FlexWrapper>
               <CardSvg />
               <Title
-                value={inputVal}
+                value={headingVal}
                 onChange={onChange}
                 onBlur={onBlur}
                 ref={titleInputRef}

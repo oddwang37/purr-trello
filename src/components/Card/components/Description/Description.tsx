@@ -34,27 +34,15 @@ const Description: FC<DescriptionProps> = ({
     }
   };
 
-  const DescriptionArea = () => {
-    if (isEditable) {
-      return (
-        <DescriptionEdit>
-          <DescriptionTextArea
-            autoFocus
-            onKeyDown={onEnterPress}
-            onChange={handleTextareaChange}
-            value={textareaValue}
-          />
-          <ButtonsWrapper>
-            <SaveButton onClick={saveDescription}>Save</SaveButton>
-            <CancelButton onClick={disableEdit}>Cancel</CancelButton>
-          </ButtonsWrapper>
-        </DescriptionEdit>
-      );
-    }
-    if (description) {
-      return <DescriptionText>{description}</DescriptionText>;
-    }
-    return (
+  const onFocusCursorToEnd = (e: React.FocusEvent<HTMLTextAreaElement>) => {
+    e.target.value = '';
+    e.target.value = textareaValue;
+  };
+
+  const StaticDescription = () => {
+    return description ? (
+      <DescriptionText>{description}</DescriptionText>
+    ) : (
       <DescriptionButton onClick={enableEdit}>Add more detailed description...</DescriptionButton>
     );
   };
@@ -67,7 +55,23 @@ const Description: FC<DescriptionProps> = ({
         <Edit onClick={enableEdit}>Edit</Edit>
         <Delete onClick={deleteDescription}>Delete</Delete>
       </FlexWrapper>
-      <DescriptionArea />
+      {isEditable ? (
+        <DescriptionEditAreaWrapper>
+          <DescriptionTextArea
+            onKeyDown={onEnterPress}
+            onChange={handleTextareaChange}
+            value={textareaValue}
+            onFocus={onFocusCursorToEnd}
+            autoFocus
+          />
+          <ButtonsWrapper>
+            <SaveButton onClick={saveDescription}>Save</SaveButton>
+            <CancelButton onClick={disableEdit}>Cancel</CancelButton>
+          </ButtonsWrapper>
+        </DescriptionEditAreaWrapper>
+      ) : (
+        <StaticDescription />
+      )}
     </>
   );
 };
@@ -115,7 +119,7 @@ const DescriptionButton = styled.div`
     background-color: rgba(0, 0, 0, 0.15);
   }
 `;
-const DescriptionEdit = styled.div`
+const DescriptionEditAreaWrapper = styled.div`
   margin: 10px 0 20px 30px;
 `;
 const DescriptionTextArea = styled.textarea`
