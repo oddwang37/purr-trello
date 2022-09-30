@@ -36,7 +36,12 @@ const Card: FC<CardProps> = ({ username, columnTitle, cardInfo, cardPopupActions
 
   const onBlur = () => {
     if (cardInfo) {
-      editCardTitle(cardInfo.id, headingVal);
+      const oldHeading = cardInfo.title;
+      if (headingVal === '') {
+        setHeadingVal(oldHeading);
+      } else {
+        editCardTitle(cardInfo.id, headingVal);
+      }
     }
   };
 

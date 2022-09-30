@@ -29,9 +29,11 @@ const Column: FC<ColumnProps> = ({ id, heading, cardsIds, cardsActions }) => {
   };
 
   const createCard = () => {
-    addCard(id, addingInputVal);
-    setAddingInputVal('');
-    setIsEditable(false);
+    if (addingInputVal) {
+      addCard(id, addingInputVal);
+      setAddingInputVal('');
+      setIsEditable(false);
+    }
   };
 
   const [inputHeadingText, setInputHeadingText] = useState<string>('');
@@ -41,7 +43,13 @@ const Column: FC<ColumnProps> = ({ id, heading, cardsIds, cardsActions }) => {
   };
 
   const onBlurHeading = () => {
-    editColumnHeading(id, inputHeadingText);
+    const prevHeading = heading;
+    if (inputHeadingText === '') {
+      editColumnHeading(id, prevHeading);
+      setInputHeadingText(heading);
+    } else {
+      editColumnHeading(id, inputHeadingText);
+    }
   };
 
   useEffect(() => {
@@ -85,10 +93,10 @@ const Column: FC<ColumnProps> = ({ id, heading, cardsIds, cardsActions }) => {
           <AddingCardInterface>
             <AddCardTextArea
               placeholder="Enter a card name..."
-              autoFocus
               onChange={handleChange}
               value={addingInputVal}
               onKeyDown={onEnterPressAddingCard}
+              autoFocus
             />
             <ButtonsWrapper>
               <SaveButton onClick={createCard}>Create</SaveButton>

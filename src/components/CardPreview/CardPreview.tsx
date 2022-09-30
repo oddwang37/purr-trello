@@ -48,6 +48,11 @@ const CardPreview: FC<CardPreviewProps> = ({
     }
   };
 
+  const onFocusCursorToEnd = (e: React.FocusEvent<HTMLTextAreaElement>) => {
+    const oldText = textareaVal;
+    e.target.value = '';
+    e.target.value = oldText;
+  };
   return (
     <>
       {isEditable ? (
@@ -56,6 +61,7 @@ const CardPreview: FC<CardPreviewProps> = ({
             onChange={handleChange}
             value={textareaVal}
             onKeyDown={onEnterPress}
+            onFocus={onFocusCursorToEnd}
             autoFocus
           />
           <SaveButton onClick={onClickSave}>Save</SaveButton>

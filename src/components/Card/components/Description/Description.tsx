@@ -35,8 +35,9 @@ const Description: FC<DescriptionProps> = ({
   };
 
   const onFocusCursorToEnd = (e: React.FocusEvent<HTMLTextAreaElement>) => {
+    const text = textareaValue;
     e.target.value = '';
-    e.target.value = textareaValue;
+    e.target.value = text;
   };
 
   const StaticDescription = () => {
