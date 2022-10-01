@@ -1,26 +1,17 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
 
-import { ColumnType, ColumnsType, CardsType } from 'types/columns';
-import { CardsActions } from 'types/stateActions';
 import Column from './components/Column/Column';
+import { useSelector } from 'react-redux';
+import { RootState } from 'redux/store';
 
-const Columns: FC<ColumnsProps> = ({ columns, cards, cardsActions }) => {
-  const { getColumnCards } = cardsActions;
+const Columns: FC<ColumnsProps> = ({ openCard }) => {
+  const columns = useSelector((state: RootState) => state.cards.columns);
 
   return (
     <Root>
-      {columns.map((item: ColumnType) => {
-        return (
-          <Column
-            id={item.id}
-            heading={item.heading}
-            cardsIds={item.cards}
-            cards={getColumnCards(item.id)}
-            key={item.id}
-            cardsActions={cardsActions}
-          />
-        );
+      {columns.map((item) => {
+        return <Column openCard={openCard} id={item.id} heading={item.heading} key={item.id} />;
       })}
     </Root>
   );
@@ -29,9 +20,7 @@ const Columns: FC<ColumnsProps> = ({ columns, cards, cardsActions }) => {
 export default Columns;
 
 type ColumnsProps = {
-  columns: ColumnsType;
-  cards: CardsType;
-  cardsActions: CardsActions;
+  openCard: () => void;
 };
 
 const Root = styled.div`

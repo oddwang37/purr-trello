@@ -1,7 +1,10 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
+import { RootState } from 'redux/store';
 
-const Header: FC<HeaderProps> = ({ username }) => {
+const Header: FC<HeaderProps> = () => {
+  const username = useSelector((state: RootState) => state.username);
   return (
     <Root>
       <Logo>logoTrello</Logo>
@@ -12,9 +15,7 @@ const Header: FC<HeaderProps> = ({ username }) => {
 
 export default Header;
 
-type HeaderProps = {
-  username: string;
-};
+type HeaderProps = {};
 
 const Root = styled.div`
   display: flex;

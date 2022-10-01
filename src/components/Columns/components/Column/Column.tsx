@@ -1,21 +1,18 @@
 import React, { FC, useEffect, useState, useRef, KeyboardEvent } from 'react';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 
-import { CardsType } from 'types/columns';
+import { RootState } from 'redux/store';
+import { selectCardsForColumn } from 'redux/features/cards/cardsSelectors';
 import { CardPreview, SaveButton } from 'components';
-import { CardsActions } from 'types/stateActions';
+import { useAppDispatch } from 'redux/store';
+import { addCard, editColumnHeading } from 'redux/features/cards/cardsSlice';
 
-const Column: FC<ColumnProps> = ({ id, heading, cardsIds, cardsActions }) => {
-  const { getColumnCards, addCard, editColumnHeading, editCardTitle, changePopupCardId } =
-    cardsActions;
+const Column: FC<ColumnProps> = ({ id, heading, openCard }) => {
+  const cards = useSelector((state: RootState) => selectCardsForColumn(state, id));
+  const dispatch = useAppDispatch();
 
-  const [cards, setCards] = useState<CardsType>([]);
   const headingRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    const columnCards = getColumnCards(id);
-    setCards(columnCards);
-  }, [cardsActions]);
 
   const [isEditable, setIsEditable] = useState<boolean>(false);
 
@@ -30,7 +27,7 @@ const Column: FC<ColumnProps> = ({ id, heading, cardsIds, cardsActions }) => {
 
   const createCard = () => {
     if (addingInputVal) {
-      addCard(id, addingInputVal);
+      dispatch(addCard({ columnId: id, title: addingInputVal }));
       setAddingInputVal('');
       setIsEditable(false);
     }
@@ -45,10 +42,10 @@ const Column: FC<ColumnProps> = ({ id, heading, cardsIds, cardsActions }) => {
   const onBlurHeading = () => {
     const prevHeading = heading;
     if (inputHeadingText === '') {
-      editColumnHeading(id, prevHeading);
+      dispatch(editColumnHeading({ columnId: id, newHeading: prevHeading }));
       setInputHeadingText(heading);
     } else {
-      editColumnHeading(id, inputHeadingText);
+      dispatch(editColumnHeading({ columnId: id, newHeading: inputHeadingText }));
     }
   };
 
@@ -84,9 +81,8 @@ const Column: FC<ColumnProps> = ({ id, heading, cardsIds, cardsActions }) => {
             cardId={item.id}
             columnId={id}
             key={item.id}
-            editCardTitle={editCardTitle}
-            changePopupCardId={changePopupCardId}
             commentsQ={item.comments.length}
+            openCard={openCard}
           />
         ))}
         {isEditable ? (
@@ -121,9 +117,7 @@ export default Column;
 type ColumnProps = {
   id: string;
   heading: string;
-  cardsIds: string[];
-  cards: CardsType;
-  cardsActions: CardsActions;
+  openCard: () => void;
 };
 
 const Content = styled.div`

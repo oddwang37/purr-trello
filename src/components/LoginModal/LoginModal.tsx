@@ -2,8 +2,11 @@ import React, { FC, useState } from 'react';
 import styled from 'styled-components';
 
 import { Overlay, Input, Button } from 'components';
+import { useAppDispatch } from 'redux/store';
+import { setUsername } from 'redux/features/username/usernameSlice';
 
-const LoginModal: FC<LoginModalProps> = ({ changeUsername, isOpened, closeModal }) => {
+const LoginModal: FC<LoginModalProps> = ({ isOpened, closeModal }) => {
+  const dispatch = useAppDispatch();
   const [inputVal, setInputVal] = useState<string>('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -11,7 +14,7 @@ const LoginModal: FC<LoginModalProps> = ({ changeUsername, isOpened, closeModal 
   };
 
   const onSubmitClick = () => {
-    changeUsername(inputVal);
+    dispatch(setUsername(inputVal));
     closeModal();
   };
   return (
@@ -28,7 +31,6 @@ const LoginModal: FC<LoginModalProps> = ({ changeUsername, isOpened, closeModal 
 export default LoginModal;
 
 type LoginModalProps = {
-  changeUsername: (newName: string) => void;
   isOpened: boolean;
   closeModal: () => void;
 };
