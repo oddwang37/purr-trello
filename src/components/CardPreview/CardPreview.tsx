@@ -3,15 +3,11 @@ import styled from 'styled-components';
 
 import { EditSvg } from 'components/svg';
 import { SaveButton } from 'components';
+import { useAppDispatch } from 'redux/store';
+import { editCardTitle, setPopupCardId } from 'redux/features/cards/cardsSlice';
 
-const CardPreview: FC<CardPreviewProps> = ({
-  title,
-  columnId,
-  cardId,
-  commentsQ,
-  editCardTitle,
-  changePopupCardId,
-}) => {
+const CardPreview: FC<CardPreviewProps> = ({ title, columnId, cardId, commentsQ, openCard }) => {
+  const dispatch = useAppDispatch();
   const [isEditable, setIsEditable] = useState<boolean>(false);
 
   const enableEdit = () => setIsEditable(true);
@@ -24,7 +20,7 @@ const CardPreview: FC<CardPreviewProps> = ({
   };
 
   const onClickSave = () => {
-    editCardTitle(cardId, textareaVal);
+    dispatch(editCardTitle({ cardId, newTitle: textareaVal }));
     disableEdit();
   };
 
@@ -34,7 +30,8 @@ const CardPreview: FC<CardPreviewProps> = ({
   };
 
   const onClickCard = (e: React.MouseEvent<HTMLElement>) => {
-    changePopupCardId(cardId);
+    dispatch(setPopupCardId(cardId));
+    openCard();
   };
 
   useEffect(() => {
@@ -43,7 +40,7 @@ const CardPreview: FC<CardPreviewProps> = ({
 
   const onEnterPress = (e: KeyboardEvent<HTMLTextAreaElement>): any => {
     if (e.key === 'Enter') {
-      editCardTitle(cardId, textareaVal);
+      dispatch(editCardTitle({ cardId, newTitle: textareaVal }));
       disableEdit();
     }
   };
@@ -86,8 +83,7 @@ type CardPreviewProps = {
   columnId: string;
   cardId: string;
   commentsQ: number;
-  editCardTitle: (cardId: string, newTitle: string) => void;
-  changePopupCardId: (cardId: string) => void;
+  openCard: () => void;
 };
 
 const Title = styled.div`
