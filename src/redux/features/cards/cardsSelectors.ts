@@ -31,3 +31,11 @@ export const selectPopupCard = createSelector(
     return popupCard || null;
   },
 );
+
+export const selectPopupCardColumnTitle = createSelector(
+  [selectAllColumns, selectPopupCardId],
+  (allColumns, popupCardId) => {
+    const columnWithPopupCard = allColumns.find((column) => column.cards.includes(popupCardId));
+    if (columnWithPopupCard) return columnWithPopupCard.heading;
+  },
+);
