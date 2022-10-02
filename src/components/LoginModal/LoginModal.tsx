@@ -14,9 +14,12 @@ const LoginModal: FC<LoginModalProps> = ({ isOpened, closeModal }) => {
   };
 
   const onSubmitClick = () => {
-    dispatch(setUsername(inputVal));
-    closeModal();
+    if (inputVal) {
+      dispatch(setUsername({ name: inputVal }));
+      closeModal();
+    }
   };
+
   return (
     <Overlay isOpened={isOpened}>
       <Root>

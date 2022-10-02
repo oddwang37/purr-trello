@@ -4,7 +4,7 @@ import usernameSlice from './username/usernameSlice';
 
 const rootReducer = combineReducers({
   cards: cardsSlice,
-  username: usernameSlice,
+  user: usernameSlice,
 });
 
 export default rootReducer;

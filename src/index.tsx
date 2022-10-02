@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import { createGlobalStyle } from 'styled-components';
 import { Provider } from 'react-redux';
-import store from 'redux/store';
+import { PersistGate } from 'redux-persist/integration/react';
+import store, { persistor } from 'redux/store';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -20,11 +21,16 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
+const Loading = () => {
+  return <div>Loading...</div>;
+};
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
-      <GlobalStyle />
+      <PersistGate persistor={persistor} loading={<Loading />}>
+        <App />
+        <GlobalStyle />
+      </PersistGate>
     </Provider>
   </React.StrictMode>,
 );
