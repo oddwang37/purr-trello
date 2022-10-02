@@ -1,26 +1,22 @@
 import React, { FC, useEffect, useState, useRef, KeyboardEvent } from 'react';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 
 import { Overlay, CloseButton } from 'components';
 import { Description, Comments } from './components';
 import { CardSvg, BinSvg } from 'components/svg';
-import { CardType } from 'types/columns';
-import { CardPopupActions } from 'types/stateActions';
+import { useAppDispatch, RootState } from 'redux/store';
+import { deleteCard, editCardTitle } from 'redux/features/cards/cardsSlice';
+import { selectPopupCard, selectPopupCardColumnTitle } from 'redux/features/cards/cardsSelectors';
 
-const Card: FC<CardProps> = ({ username, columnTitle, cardInfo, cardPopupActions, isOpened }) => {
-  const {
-    deleteCard,
-    editCardTitle,
-    editDescription,
-    deleteDescription,
-    addComment,
-    editCommentText,
-    deleteComment,
-    closeCard,
-  } = cardPopupActions;
+const Card: FC<CardProps> = ({ isOpened, closeCard }) => {
+  const cardInfo = useSelector(selectPopupCard);
+  const username = useSelector((state: RootState) => state.user.name);
+  const columnTitle = useSelector(selectPopupCardColumnTitle);
+  const dispatch = useAppDispatch();
 
   const onClickDelete = () => {
-    deleteCard();
+    dispatch(deleteCard());
     closeCard();
   };
 
@@ -40,7 +36,7 @@ const Card: FC<CardProps> = ({ username, columnTitle, cardInfo, cardPopupActions
       if (headingVal === '') {
         setHeadingVal(oldHeading);
       } else {
-        editCardTitle(cardInfo.id, headingVal);
+        dispatch(editCardTitle({ cardId: cardInfo.id, newTitle: headingVal }));
       }
     }
   };
@@ -79,23 +75,13 @@ const Card: FC<CardProps> = ({ username, columnTitle, cardInfo, cardPopupActions
                 onKeyDown={onEnterPress}
               />
             </FlexWrapper>
-            <Column>
-              In <ColumnTitle>{columnTitle}</ColumnTitle> column
+            <Info>
+              In <ColumnTitle>{columnTitle}</ColumnTitle>
               <br />
               by {username}
-            </Column>
-            <Description
-              description={cardInfo.description}
-              editDescription={editDescription}
-              deleteDescription={deleteDescription}
-            />
-            <Comments
-              cardId={cardInfo.id}
-              comments={cardInfo.comments}
-              addComment={addComment}
-              editCommentText={editCommentText}
-              deleteComment={deleteComment}
-            />
+            </Info>
+            <Description description={cardInfo.description} />
+            <Comments cardId={cardInfo.id} comments={cardInfo.comments} />
             <CloseButton closeModal={closeCard} />
             <DeleteButton onClick={onClickDelete}>
               <BinSvg />
@@ -110,11 +96,8 @@ const Card: FC<CardProps> = ({ username, columnTitle, cardInfo, cardPopupActions
 export default Card;
 
 type CardProps = {
-  username: string;
-  cardInfo: CardType | null;
-  columnTitle: string | null;
-  cardPopupActions: CardPopupActions;
   isOpened: boolean;
+  closeCard: () => void;
 };
 const Root = styled.div`
   width: 45vw;
@@ -139,7 +122,7 @@ const Title = styled.input`
   font-family: Arial, Helvetica, sans-serif;
   padding: 4px;
 `;
-const Column = styled.div`
+const Info = styled.div`
   font-size: 12px;
   color: rgba(0, 0, 0, 0.4);
   margin: 6px 0 20px 30px;

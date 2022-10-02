@@ -2,12 +2,11 @@ import React, { FC, useState, KeyboardEvent } from 'react';
 import styled from 'styled-components';
 
 import { DescriptionSvg } from 'components/svg';
+import { useAppDispatch } from 'redux/store';
+import { editDescription, deleteDescription } from 'redux/features/cards/cardsSlice';
 
-const Description: FC<DescriptionProps> = ({
-  description = '',
-  editDescription,
-  deleteDescription,
-}) => {
+const Description: FC<DescriptionProps> = ({ description = '' }) => {
+  const dispatch = useAppDispatch();
   const [isEditable, setIsEditable] = useState<boolean>(false);
 
   const enableEdit = () => {
@@ -23,7 +22,7 @@ const Description: FC<DescriptionProps> = ({
   };
 
   const saveDescription = () => {
-    editDescription(textareaValue);
+    dispatch(editDescription(textareaValue));
     setTextareaValue('');
     disableEdit();
   };
@@ -54,7 +53,7 @@ const Description: FC<DescriptionProps> = ({
         <DescriptionSvg />
         <Title>Description</Title>
         <Edit onClick={enableEdit}>Edit</Edit>
-        <Delete onClick={deleteDescription}>Delete</Delete>
+        <Delete onClick={() => dispatch(deleteDescription())}>Delete</Delete>
       </FlexWrapper>
       {isEditable ? (
         <DescriptionEditAreaWrapper>
@@ -81,8 +80,6 @@ export default Description;
 
 type DescriptionProps = {
   description: string;
-  editDescription: (newDescr: string) => void;
-  deleteDescription: () => void;
 };
 
 const FlexWrapper = styled.div`

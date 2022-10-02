@@ -8,14 +8,12 @@ import {
   ButtonsWrapper,
 } from 'components/Card/components/Description/Description';
 import { Comment } from './components';
+import { useAppDispatch } from 'redux/store';
+import { addComment } from 'redux/features/cards/cardsSlice';
 
-const Comments: FC<CommentsProps> = ({
-  cardId,
-  comments,
-  addComment,
-  editCommentText,
-  deleteComment,
-}) => {
+const Comments: FC<CommentsProps> = ({ cardId, comments }) => {
+  const dispatch = useAppDispatch();
+
   const [isEditable, setIsEditable] = useState<boolean>(false);
 
   const enableEdit = () => setIsEditable(true);
@@ -28,7 +26,7 @@ const Comments: FC<CommentsProps> = ({
   };
 
   const sendComment = () => {
-    addComment(inputValue);
+    dispatch(addComment(inputValue));
     disableEdit();
     setInputValue('');
   };
@@ -68,15 +66,7 @@ const Comments: FC<CommentsProps> = ({
       {comments ? (
         <CommentsSection>
           {comments.map((item) => (
-            <Comment
-              id={item.id}
-              cardId={cardId}
-              text={item.text}
-              date={item.date}
-              editCommentText={editCommentText}
-              deleteComment={deleteComment}
-              key={item.id}
-            />
+            <Comment id={item.id} cardId={cardId} text={item.text} date={item.date} key={item.id} />
           ))}
         </CommentsSection>
       ) : (
@@ -91,9 +81,6 @@ export default Comments;
 type CommentsProps = {
   cardId: string;
   comments?: { text: string; date: string; id: string }[];
-  addComment: (commentText: string) => void;
-  editCommentText: (cardId: string, commentId: string, newText: string) => void;
-  deleteComment: (cardId: string, commentId: string) => void;
 };
 
 const FlexWrapper = styled.div`

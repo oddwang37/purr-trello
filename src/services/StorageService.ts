@@ -1,7 +1,3 @@
-import { CardsType, ColumnsType } from 'types/columns';
-
-type Data<T> = T extends 'cards' ? CardsType : T extends 'columns' ? ColumnsType : string;
-
 export enum StorageKeys {
   cards = 'cards',
   columns = 'columns',
@@ -9,7 +5,7 @@ export enum StorageKeys {
 }
 
 class StorageService {
-  setItem(storageKey: StorageKeys, data: Data<StorageKeys>): void {
+  setItem<DataType>(storageKey: StorageKeys, data: DataType): void {
     const stringifiedValue = JSON.stringify(data);
     localStorage.setItem(storageKey, stringifiedValue);
   }

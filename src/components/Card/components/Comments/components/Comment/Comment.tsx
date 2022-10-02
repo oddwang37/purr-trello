@@ -2,8 +2,12 @@ import React, { FC, useState, useEffect, useRef, KeyboardEvent } from 'react';
 import styled from 'styled-components';
 
 import { AvatarSvg } from 'components/svg';
+import { useAppDispatch } from 'redux/store';
+import { editComment, deleteComment } from 'redux/features/cards/cardsSlice';
 
-const Comment: FC<CommentProps> = ({ id, cardId, text, date, editCommentText, deleteComment }) => {
+const Comment: FC<CommentProps> = ({ id, cardId, text, date }) => {
+  const dispatch = useAppDispatch();
+
   const [inputValue, setInputValue] = useState<string>('');
   const [inputIsReadOnly, setInputIsReadOnly] = useState<boolean>(true);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -24,16 +28,15 @@ const Comment: FC<CommentProps> = ({ id, cardId, text, date, editCommentText, de
   };
 
   const onClickDelete = (e: React.MouseEvent<HTMLElement>) => {
-    deleteComment(cardId, id);
+    dispatch(deleteComment({ cardId, commentId: id }));
   };
 
   const onBlurSave = () => {
-    editCommentText(cardId, id, inputValue);
+    dispatch(editComment({ cardId, commentId: id, newText: inputValue }));
     setInputIsReadOnly(true);
   };
   const onEnterPress = (e: KeyboardEvent<HTMLInputElement>): any => {
     if (e.key === 'Enter' && inputRef.current) {
-      /// e.target.blur(); ///
       inputRef.current.blur();
     }
   };
@@ -74,8 +77,6 @@ type CommentProps = {
   cardId: string;
   text: string;
   date: string;
-  editCommentText: (cardId: string, commentId: string, newTitle: string) => void;
-  deleteComment: (cardId: string, commentId: string) => void;
 };
 const Root = styled.div`
   display: flex;
