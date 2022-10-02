@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'redux/store';
 
 const Header: FC<HeaderProps> = () => {
-  const username = useSelector((state: RootState) => state.username);
+  const username = useSelector((state: RootState) => state.user.name);
   return (
     <Root>
       <Logo>logoTrello</Logo>

@@ -11,7 +11,7 @@ import { selectPopupCard } from 'redux/features/cards/cardsSelectors';
 
 const Card: FC<CardProps> = ({ isOpened, closeCard }) => {
   const cardInfo = useSelector(selectPopupCard);
-  const username = useSelector((state: RootState) => state.username);
+  const username = useSelector((state: RootState) => state.user.name);
   const dispatch = useAppDispatch();
 
   const onClickDelete = () => {
