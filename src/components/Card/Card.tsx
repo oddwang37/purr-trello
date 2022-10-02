@@ -7,11 +7,12 @@ import { Description, Comments } from './components';
 import { CardSvg, BinSvg } from 'components/svg';
 import { useAppDispatch, RootState } from 'redux/store';
 import { deleteCard, editCardTitle } from 'redux/features/cards/cardsSlice';
-import { selectPopupCard } from 'redux/features/cards/cardsSelectors';
+import { selectPopupCard, selectPopupCardColumnTitle } from 'redux/features/cards/cardsSelectors';
 
 const Card: FC<CardProps> = ({ isOpened, closeCard }) => {
   const cardInfo = useSelector(selectPopupCard);
   const username = useSelector((state: RootState) => state.user.name);
+  const columnTitle = useSelector(selectPopupCardColumnTitle);
   const dispatch = useAppDispatch();
 
   const onClickDelete = () => {
@@ -74,11 +75,11 @@ const Card: FC<CardProps> = ({ isOpened, closeCard }) => {
                 onKeyDown={onEnterPress}
               />
             </FlexWrapper>
-            <Column>
-              In <ColumnTitle>COLUMN TITLE</ColumnTitle> column
+            <Info>
+              In <ColumnTitle>{columnTitle}</ColumnTitle>
               <br />
               by {username}
-            </Column>
+            </Info>
             <Description description={cardInfo.description} />
             <Comments cardId={cardInfo.id} comments={cardInfo.comments} />
             <CloseButton closeModal={closeCard} />
@@ -121,7 +122,7 @@ const Title = styled.input`
   font-family: Arial, Helvetica, sans-serif;
   padding: 4px;
 `;
-const Column = styled.div`
+const Info = styled.div`
   font-size: 12px;
   color: rgba(0, 0, 0, 0.4);
   margin: 6px 0 20px 30px;
