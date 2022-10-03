@@ -9,7 +9,7 @@ import {
 } from 'components/Card/components/Description/Description';
 import { Comment } from './components';
 import { useAppDispatch } from 'redux/store';
-import { addComment } from 'redux/features/cards/cardsSlice';
+import { addComment } from 'redux/ducks/cards/slices';
 
 const Comments: FC<CommentsProps> = ({ cardId, comments }) => {
   const dispatch = useAppDispatch();
@@ -26,7 +26,7 @@ const Comments: FC<CommentsProps> = ({ cardId, comments }) => {
   };
 
   const sendComment = () => {
-    dispatch(addComment(inputValue));
+    dispatch(addComment({ cardId, text: inputValue }));
     disableEdit();
     setInputValue('');
   };

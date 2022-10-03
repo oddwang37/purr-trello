@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import { Overlay, Input, Button } from 'components';
 import { useAppDispatch } from 'redux/store';
-import { setUsername } from 'redux/features/username/usernameSlice';
+import { setUsername } from 'redux/ducks/username/slices';
 
 const LoginModal: FC<LoginModalProps> = ({ isOpened, closeModal }) => {
   const dispatch = useAppDispatch();

@@ -1,19 +1,17 @@
-import React, { FC, useEffect, useState, useRef, KeyboardEvent } from "react";
-import styled from "styled-components";
-import { useSelector } from "react-redux";
+import React, { FC, useEffect, useState, useRef, KeyboardEvent } from 'react';
+import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 
-import { RootState } from "redux/store";
-import { cardsDuckSelectors } from "redux/cards";
-import { CardPreview, SaveButton } from "components";
-import { useAppDispatch } from "redux/store";
-import { editColumnHeading } from "redux/features/cards/cardsSlice";
-import { addCard } from "redux/cards/slices";
-import { v4 as uuid } from "uuid";
+import { RootState } from 'redux/store';
+import { cardsSelectors } from 'redux/ducks/cards';
+import { CardPreview, SaveButton } from 'components';
+import { useAppDispatch } from 'redux/store';
+import { editColumnHeading } from 'redux/ducks/columns/slices';
+import { addCard } from 'redux/ducks/cards/slices';
+import { v4 as uuid } from 'uuid';
 
 const Column: FC<ColumnProps> = ({ id, heading, openCard }) => {
-  const cards = useSelector((state: RootState) =>
-    cardsDuckSelectors.selectCardsForColumn(state, id)
-  );
+  const cards = useSelector((state: RootState) => cardsSelectors.selectCardsForColumn(state, id));
   const dispatch = useAppDispatch();
 
   const headingRef = useRef<HTMLInputElement>(null);
@@ -23,7 +21,7 @@ const Column: FC<ColumnProps> = ({ id, heading, openCard }) => {
   const enableEdit = () => setIsEditable(true);
   const disableEdit = () => setIsEditable(false);
 
-  const [addingInputVal, setAddingInputVal] = useState<string>("");
+  const [addingInputVal, setAddingInputVal] = useState<string>('');
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setAddingInputVal(e.target.value);
@@ -32,12 +30,12 @@ const Column: FC<ColumnProps> = ({ id, heading, openCard }) => {
   const createCard = () => {
     if (addingInputVal) {
       dispatch(addCard({ columnId: id, title: addingInputVal, id: uuid() }));
-      setAddingInputVal("");
+      setAddingInputVal('');
       setIsEditable(false);
     }
   };
 
-  const [inputHeadingText, setInputHeadingText] = useState<string>("");
+  const [inputHeadingText, setInputHeadingText] = useState<string>('');
 
   const onHeadingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputHeadingText(e.target.value);
@@ -45,13 +43,11 @@ const Column: FC<ColumnProps> = ({ id, heading, openCard }) => {
 
   const onBlurHeading = () => {
     const prevHeading = heading;
-    if (inputHeadingText === "") {
+    if (inputHeadingText === '') {
       dispatch(editColumnHeading({ columnId: id, newHeading: prevHeading }));
       setInputHeadingText(heading);
     } else {
-      dispatch(
-        editColumnHeading({ columnId: id, newHeading: inputHeadingText })
-      );
+      dispatch(editColumnHeading({ columnId: id, newHeading: inputHeadingText }));
     }
   };
 
@@ -60,15 +56,13 @@ const Column: FC<ColumnProps> = ({ id, heading, openCard }) => {
   }, [heading]);
 
   const onEnterPressHeading = (e: KeyboardEvent<HTMLInputElement>): any => {
-    if (e.key === "Enter" && headingRef.current) {
+    if (e.key === 'Enter' && headingRef.current) {
       headingRef.current.blur();
     }
   };
 
-  const onEnterPressAddingCard = (
-    e: KeyboardEvent<HTMLTextAreaElement>
-  ): any => {
-    if (e.key === "Enter") {
+  const onEnterPressAddingCard = (e: KeyboardEvent<HTMLTextAreaElement>): any => {
+    if (e.key === 'Enter') {
       createCard();
     }
   };
