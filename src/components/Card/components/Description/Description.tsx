@@ -3,9 +3,9 @@ import styled from 'styled-components';
 
 import { DescriptionSvg } from 'components/svg';
 import { useAppDispatch } from 'redux/store';
-import { editDescription, deleteDescription } from 'redux/features/cards/cardsSlice';
+import { editDescription, deleteDescription } from 'redux/ducks/cards/slices';
 
-const Description: FC<DescriptionProps> = ({ description = '' }) => {
+const Description: FC<DescriptionProps> = ({ cardId, description = '' }) => {
   const dispatch = useAppDispatch();
   const [isEditable, setIsEditable] = useState<boolean>(false);
 
@@ -22,7 +22,7 @@ const Description: FC<DescriptionProps> = ({ description = '' }) => {
   };
 
   const saveDescription = () => {
-    dispatch(editDescription(textareaValue));
+    dispatch(editDescription({ cardId, newDescription: textareaValue }));
     setTextareaValue('');
     disableEdit();
   };
@@ -53,7 +53,7 @@ const Description: FC<DescriptionProps> = ({ description = '' }) => {
         <DescriptionSvg />
         <Title>Description</Title>
         <Edit onClick={enableEdit}>Edit</Edit>
-        <Delete onClick={() => dispatch(deleteDescription())}>Delete</Delete>
+        <Delete onClick={() => dispatch(deleteDescription({ cardId }))}>Delete</Delete>
       </FlexWrapper>
       {isEditable ? (
         <DescriptionEditAreaWrapper>
@@ -79,6 +79,7 @@ const Description: FC<DescriptionProps> = ({ description = '' }) => {
 export default Description;
 
 type DescriptionProps = {
+  cardId: string;
   description: string;
 };
 

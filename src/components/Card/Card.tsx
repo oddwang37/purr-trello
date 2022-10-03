@@ -6,17 +6,20 @@ import { Overlay, CloseButton } from 'components';
 import { Description, Comments } from './components';
 import { CardSvg, BinSvg } from 'components/svg';
 import { useAppDispatch, RootState } from 'redux/store';
-import { deleteCard, editCardTitle } from 'redux/features/cards/cardsSlice';
-import { selectPopupCard, selectPopupCardColumnTitle } from 'redux/features/cards/cardsSelectors';
+import { deleteCard, editCardTitle } from 'redux/ducks/cards/slices';
+import { selectCardById } from 'redux/ducks/cards/selectors';
+import { selectPopupCardId } from 'redux/ducks/popupCard/selectors';
+import { selectColumnOfCard } from 'redux/ducks/columns/selectors';
 
 const Card: FC<CardProps> = ({ isOpened, closeCard }) => {
-  const cardInfo = useSelector(selectPopupCard);
+  const cardId = useSelector(selectPopupCardId);
+  const columnInfo = useSelector((state: RootState) => selectColumnOfCard(state, cardId));
+  const cardInfo = useSelector((state: RootState) => selectCardById(state, cardId));
   const username = useSelector((state: RootState) => state.user.name);
-  const columnTitle = useSelector(selectPopupCardColumnTitle);
   const dispatch = useAppDispatch();
 
   const onClickDelete = () => {
-    dispatch(deleteCard());
+    dispatch(deleteCard({ cardId, columnId: cardInfo?.id || '' }));
     closeCard();
   };
 
@@ -76,11 +79,11 @@ const Card: FC<CardProps> = ({ isOpened, closeCard }) => {
               />
             </FlexWrapper>
             <Info>
-              In <ColumnTitle>{columnTitle}</ColumnTitle>
+              In <ColumnTitle>{columnInfo?.heading}</ColumnTitle>
               <br />
               by {username}
             </Info>
-            <Description description={cardInfo.description} />
+            <Description cardId={cardId} description={cardInfo.description} />
             <Comments cardId={cardInfo.id} comments={cardInfo.comments} />
             <CloseButton closeModal={closeCard} />
             <DeleteButton onClick={onClickDelete}>

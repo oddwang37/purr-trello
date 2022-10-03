@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import { AvatarSvg } from 'components/svg';
 import { useAppDispatch } from 'redux/store';
-import { editComment, deleteComment } from 'redux/features/cards/cardsSlice';
+import { editComment, deleteComment } from 'redux/ducks/cards/slices';
 
 const Comment: FC<CommentProps> = ({ id, cardId, text, date }) => {
   const dispatch = useAppDispatch();

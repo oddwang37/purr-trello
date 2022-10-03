@@ -4,7 +4,8 @@ import styled from 'styled-components';
 import { EditSvg } from 'components/svg';
 import { SaveButton } from 'components';
 import { useAppDispatch } from 'redux/store';
-import { editCardTitle, setPopupCardId } from 'redux/features/cards/cardsSlice';
+import { editCardTitle } from 'redux/ducks/cards/slices';
+import { setPopupCardId } from 'redux/ducks/popupCard/slices';
 
 const CardPreview: FC<CardPreviewProps> = ({ title, columnId, cardId, commentsQ, openCard }) => {
   const dispatch = useAppDispatch();
