@@ -1,17 +1,25 @@
-import React, { FC } from 'react';
-import styled from 'styled-components';
+import React, { FC } from "react";
+import styled from "styled-components";
 
-import Column from './components/Column/Column';
-import { useSelector } from 'react-redux';
-import { RootState } from 'redux/store';
+import Column from "./components/Column/Column";
+import { useSelector } from "react-redux";
+import { RootState } from "redux/store";
+import { columnSelectors } from "redux/columns";
 
 const Columns: FC<ColumnsProps> = ({ openCard }) => {
-  const columns = useSelector((state: RootState) => state.cards.columns);
+  const columns = useSelector(columnSelectors.selectColumns);
 
   return (
     <Root>
       {columns.map((item) => {
-        return <Column openCard={openCard} id={item.id} heading={item.heading} key={item.id} />;
+        return (
+          <Column
+            openCard={openCard}
+            id={item.id}
+            heading={item.heading}
+            key={item.id}
+          />
+        );
       })}
     </Root>
   );

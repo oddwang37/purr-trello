@@ -1,6 +1,6 @@
-import { createSelector } from '@reduxjs/toolkit';
-import { RootState } from 'redux/store';
-import { CardsType } from 'types/columns';
+import { createSelector } from "@reduxjs/toolkit";
+import { RootState } from "redux/store";
+import { CardsType } from "types/columns";
 
 export const selectAllColumns = (state: RootState) => state.cards.columns;
 export const selectAllCards = (state: RootState) => state.cards.cards;
@@ -19,7 +19,7 @@ export const selectCardsForColumn = createSelector(
       });
       return columnCards;
     } else return [];
-  },
+  }
 );
 
 export const selectPopupCardId = (state: RootState) => state.cards.popupCardId;
@@ -29,13 +29,15 @@ export const selectPopupCard = createSelector(
   (allCards, popupCardId) => {
     const popupCard = allCards.find((card) => card.id === popupCardId);
     return popupCard || null;
-  },
+  }
 );
 
 export const selectPopupCardColumnTitle = createSelector(
   [selectAllColumns, selectPopupCardId],
   (allColumns, popupCardId) => {
-    const columnWithPopupCard = allColumns.find((column) => column.cards.includes(popupCardId));
+    const columnWithPopupCard = allColumns.find((column) =>
+      column.cards.includes(popupCardId)
+    );
     if (columnWithPopupCard) return columnWithPopupCard.heading;
-  },
+  }
 );
