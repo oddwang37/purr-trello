@@ -39,4 +39,3 @@ export default App;
 const Root = styled.div`
   padding: 30px 60px;
 `;
-// some release changes

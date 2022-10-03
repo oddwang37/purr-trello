@@ -1,13 +1,23 @@
 import React, { FC, InputHTMLAttributes } from 'react';
 import styled from 'styled-components';
+import { useController, UseControllerProps, FieldPath, FieldValues } from 'react-hook-form';
 
-const Input: FC<InputProps> = (props) => {
-  return <Root {...props} />;
+type TextInputProps<TFieldValues extends FieldValues, TName extends FieldPath<TFieldValues>> = {
+  id?: string;
+} & UseControllerProps<TFieldValues, TName> &
+  InputHTMLAttributes<HTMLInputElement>;
+
+const Input = <TFieldValues extends FieldValues, TName extends FieldPath<TFieldValues>>({
+  id,
+  control,
+  name,
+}: TextInputProps<TFieldValues, TName>) => {
+  const { field } = useController({ control, name });
+
+  return <Root {...field} placeholder={name} />;
 };
 
 export default Input;
-
-type InputProps = InputHTMLAttributes<HTMLInputElement>;
 
 const Root = styled.input`
   height: 30px;

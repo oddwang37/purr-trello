@@ -1,6 +1,7 @@
 import React, { FC, useEffect, useState, useRef, KeyboardEvent } from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
+import { useForm, FieldValues } from 'react-hook-form';
 
 import { RootState } from 'redux/store';
 import { selectCardsForColumn } from 'redux/features/cards/cardsSelectors';
@@ -8,9 +9,22 @@ import { CardPreview, SaveButton } from 'components';
 import { useAppDispatch } from 'redux/store';
 import { addCard, editColumnHeading } from 'redux/features/cards/cardsSlice';
 
+interface FormValues extends FieldValues {
+  addingCardInput: string;
+}
+
 const Column: FC<ColumnProps> = ({ id, heading, openCard }) => {
   const cards = useSelector((state: RootState) => selectCardsForColumn(state, id));
+  const { handleSubmit, control } = useForm<FormValues>({
+    defaultValues: {
+      addingCardInput: '',
+    },
+  });
   const dispatch = useAppDispatch();
+
+  const onSubmit = (data: FormValues) => {
+    console.log(data);
+  };
 
   const headingRef = useRef<HTMLInputElement>(null);
 
@@ -102,10 +116,12 @@ const Column: FC<ColumnProps> = ({ id, heading, openCard }) => {
             </ButtonsWrapper>
           </AddingCardInterface>
         ) : (
-          <AddCard onClick={enableEdit}>
-            <Plus>+</Plus>
-            <div>Add card</div>
-          </AddCard>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <AddCard onClick={enableEdit}>
+              <Plus>+</Plus>
+              <div>Add card</div>
+            </AddCard>
+          </form>
         )}
       </Content>
     </Root>
